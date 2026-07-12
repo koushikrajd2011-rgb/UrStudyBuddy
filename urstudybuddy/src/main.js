@@ -62,5 +62,38 @@ if (startBtn) {
       updateDisplay();
     }, 1000);
   });
+
+  pauseBtn.addEventListener("click", () => {
+    clearInterval(intervalId);
+    intervalId = null;
+  });
+
+  resetBtn.addEventListener("click", () => {
+    clearInterval(intervalId);
+    intervalId = null;
+    seconds = 0;
+    updateDisplay();
+  });
 }
 
+const addRowBtn = document.getElementById("addRowBtn");
+if (addRowBtn) {
+  const timetableBody = document.getElementById("timetableBody");
+
+  addRowBtn.addEventListener("click", () => {
+    const newRow = document.createElement("tr");
+
+    const timeCell = document.createElement("td");
+    timeCell.contentEditable = "true";
+    timeCell.textContent = "New time";
+    newRow.appendChild(timeCell);
+
+    for (let i = 0; i < 7; i++) {
+      const dayCell = document.createElement("td");
+      dayCell.contentEditable = "true";
+      newRow.appendChild(dayCell);
+    }
+
+    timetableBody.appendChild(newRow);
+  });
+}

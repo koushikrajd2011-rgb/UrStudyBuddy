@@ -2,7 +2,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #f4f7fc;
+  color: #333;
 }
 
 .container {
@@ -18,14 +23,17 @@ h1 {
   font-size: 3rem;
 }
 
-body {
-  background: #f4f7fc;
-  color: #333;
-}
-
 p {
   text-align: center;
   margin: 15px 0 30px;
+}
+
+section {
+  margin-top: 35px;
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
 }
 
 button {
@@ -43,10 +51,58 @@ button:hover {
   background: #3730a3;
 }
 
-section {
-  margin-top: 35px;
-  background: white;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+input, select {
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  width: 250px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.error {
+  color: #e11d48;
+  font-size: 13px;
+  min-height: 18px;
+  text-align: center;
+}
+
+li {
+  list-style: none;
+  padding: 8px;
+  margin: 6px 0;
+  background: #f4f7fc;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+li.done {
+  text-decoration: line-through;
+  color: gray;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+th, td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+td[contenteditable="true"] {
+  cursor: text;
+}
+
+td[contenteditable="true"]:focus {
+  background: #eef1ff;
+}
+
+#addRowBtn {
+  margin-top: 15px;
 }
