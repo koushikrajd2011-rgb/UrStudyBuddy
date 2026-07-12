@@ -6,38 +6,46 @@
         <title>UrStudyBuddy</title>
     </head>
     <body>
-        
-        <div class="container">
-  <h1>UrStudyBuddy</h1>
-  <p>Your study companion. It is AI powered</p>
-  
-  <button id="addBtn">Get Started</button>
-  
-  <section>
-    <h2>Make your Timetable</h2>
-  </section>
 
-  <section>
-    <h2>Upload Notes and PDF</h2>
-  </section>
+      <div id="nameOverlay" class="overlay">
+        <div class="overlay-box">
+          <h1>UrStudyBuddy</h1>
+          <p>What should we call you?</p>
+          <input type="text" id="nameInput" placeholder="Enter your name" maxlength="20" />
+          <p id="errorMsg" class="error"></p>
+          <button id="addBtn">Get goin'!</button>
+        </div>
+      </div>
 
-  <section>
-    <h2>Generate Summary</h2>
-  </section>
+      <div class="container">
+        <h1>UrStudyBuddy</h1>
+        <p>Your study companion. It is AI powered</p>
 
-  <section>
-    <h2>Generate Quiz</h2>
-  </section>
+        <section>
+          <h2>Make your Timetable</h2>
+        </section>
 
-  <section>
-    <h2>Homework Tracking</h2>
-  </section>
+        <section>
+          <h2>Upload Notes and PDF</h2>
+        </section>
 
-  <section>
-    <h2> Email your study materials</h2>
-  </section>
-</div>
+        <section>
+          <h2>Generate Summary</h2>
+        </section>
 
-<script type="module" src="/src/main.js"></script>
+        <section>
+          <h2>Generate Quiz</h2>
+        </section>
+
+        <section>
+          <h2>Homework Tracking</h2>
+        </section>
+
+        <section>
+          <h2>Email your study materials</h2>
+        </section>
+      </div>
+
+      <script type="module" src="/src/main.js"></script>
     </body>
 </html>

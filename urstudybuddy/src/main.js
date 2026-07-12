@@ -97,3 +97,13 @@ if (addRowBtn) {
     timetableBody.appendChild(newRow);
   });
 }
+
+addBtn.addEventListener("click", () => {
+  const name = nameInput.value.trim();
+  if (name === "") {
+    errorMsg.textContent = "Please enter your name.";
+    return;
+  }
+  localStorage.setItem("userName", name);
+  document.getElementById("nameOverlay").style.display = "none";
+});
