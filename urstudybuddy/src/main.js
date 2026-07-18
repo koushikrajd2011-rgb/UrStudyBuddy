@@ -1,25 +1,45 @@
 import './style.css'
 
+function setText(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+window.showPage = function (pageId) {
+  document.querySelectorAll(".page").forEach(page => {
+    page.style.display = "none";
+  });
+  document.getElementById(pageId).style.display = "block";
+};
+
+const showNameBtn = document.getElementById("showNameBtn");
+if (showNameBtn) {
+  showNameBtn.addEventListener("click", () => {
+    document.getElementById("nameOverlay").classList.add("visible");
+  });
+}
+
 const addBtn = document.getElementById("addBtn");
 if (addBtn) {
   const nameInput = document.getElementById("nameInput");
   const errorMsg = document.getElementById("errorMsg");
 
   addBtn.addEventListener("click", () => {
-    const name = nameInput.value.trim();
-    if (name === "") {
+    const enteredName = nameInput.value.trim();
+    if (enteredName === "") {
       errorMsg.textContent = "Please enter your name.";
       return;
     }
-    localStorage.setItem("userName", name);
-    window.location.href = "home.html";
-  });
-}
+    sessionStorage.setItem("userName", enteredName);
+    document.getElementById("nameOverlay").classList.remove("visible");
+    document.getElementById("landingPage").style.display = "none";
+    showPage("dashboardPage");
 
-const welcomeText = document.getElementById("welcomeText");
-if (welcomeText) {
-  const name = localStorage.getItem("userName") || "Student";
-  welcomeText.textContent = `Welcome, ${name}!`;
+    const name = sessionStorage.getItem("userName") || "Student";
+    setText("welcomeText", `Welcome, ${name}!`);
+    setText("homeworkGreeting", `Hey ${name}, ready to tackle homework?`);
+    setText("timetableGreeting", `${name}'s Weekly Schedule`);
+  });
 }
 
 const addTaskBtn = document.getElementById("addTaskBtn");
@@ -97,13 +117,3 @@ if (addRowBtn) {
     timetableBody.appendChild(newRow);
   });
 }
-
-addBtn.addEventListener("click", () => {
-  const name = nameInput.value.trim();
-  if (name === "") {
-    errorMsg.textContent = "Please enter your name.";
-    return;
-  }
-  localStorage.setItem("userName", name);
-  document.getElementById("nameOverlay").style.display = "none";
-});

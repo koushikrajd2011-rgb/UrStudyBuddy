@@ -108,17 +108,21 @@ td[contenteditable="true"]:focus {
 }
 
 .overlay {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background: #f4f7fc;
-  display: flex;
   align-items: center;
   justify-content: center;
   z-index: 100;
   animation: fadeIn 0.4s ease;
+}
+
+.overlay.visible {
+  display: flex;
 }
 
 .overlay-box {
@@ -134,4 +138,8 @@ td[contenteditable="true"]:focus {
 @keyframes slideUp {
   from { transform: translateY(20px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
+}
+
+.page {
+  display: block;
 }

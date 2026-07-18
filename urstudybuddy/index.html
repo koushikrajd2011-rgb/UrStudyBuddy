@@ -2,50 +2,91 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <meta name="Viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>UrStudyBuddy</title>
+        <link rel="stylesheet" href="/src/style.css">
     </head>
     <body>
-
-      <div id="nameOverlay" class="overlay">
-        <div class="overlay-box">
-          <h1>UrStudyBuddy</h1>
-          <p>What should we call you?</p>
-          <input type="text" id="nameInput" placeholder="Enter your name" maxlength="20" />
-          <p id="errorMsg" class="error"></p>
-          <button id="addBtn">Get goin'!</button>
+        <div id="nameOverlay" class="overlay">
+            <div class="overlay-box">
+                <h1>UrStudyBuddy</h1>
+                <p>What should we call you?</p>
+                <input type="text" id="nameInput" placeholder="Enter your name" max length="20" />
+                <p id="errorMsg" class="error"></p>
+                <button id="addBtn">Get goin'!</button>
+            </div>
         </div>
-      </div>
 
-      <div class="container">
-        <h1>UrStudyBuddy</h1>
-        <p>Your study companion. It is AI powered</p>
+        <div id="landingPage" class="page">
+            <div class="container">
+                <h1>UrStudyBuddy</h1>
+                <p>Your Study companion. It is very useful</p>
+                <button id="showNameBtn">Get Started</button>
+            </div>
+        </div>
+        
+        <div id="dashboardPage" class="page" style="display:none;">
+            <div class="container">
+                <h1 id="welcomeText">Dashboard</h1>
+                <p>So what will you be workin with today, </p>
+                <button onclick="showPage('uploadPage')">Notes & Quizzes</button>
+                <button onclick="showPage('timetablePage')">Timetable</button>
+                <button onclick="showPage('homeworkPage')">Homework Buddy</button>
+            </div>
+        </div>
 
-        <section>
-          <h2>Make your Timetable</h2>
-        </section>
+        <div id="uploadPage" class="page" style="display:none;">
+            <div class="container">
+                <button onclick="showPage('dashboardPage')"></button>Back</button>
+                <h1>Upload Your Notes</h1>
+                <p>Upload a PDF and let AI generate fresh notes and a quiz</p>
+                <input type="file" id="pdfInput" accept="application/pdf" />
+                <button id="generateBtn">Generate</button>
+                <p id="statusMsg" class="error"></p>
+            </div>
+        </div>
 
-        <section>
-          <h2>Upload Notes and PDF</h2>
-        </section>
+        <div id="timetablePage" class="page" style="display:none;">
+            <div class="container">
+                <button onclick="showPage ('dashboardPage')">Back</button>
+                <h1>Timetable</h1>
+                <h2 id="timetableGreeting"></h2>
+                <section>
+                    <h2>Your Week</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Time</th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+                            </tr>
+                        </thead>
+                        <tbody id="timetableBody"></tbody>
+                    </table>
+                    <button id="addRowBtn">+</button>
+                </section>
+            </div>
+        </div>
 
-        <section>
-          <h2>Generate Summary</h2>
-        </section>
+        <div id="homeworkPage" class="page" style="display:none;">
+            <div class="container">
+                <button onclick="showPage('dashboardPage')">Back</button>
+                <h1>Homework Buddy</h1>
+                <h2 id="homeworkGreeting"></h2>
+                <section>
+                    <h2>Homework List</h2>
+                    <input type="text" id="taskInput" placeholder="Add a Task..." />
+                    <button id="addTaskBtn">Add</button>
+                    <ul id="taskList"></ul>
+                </section>
+                <section>
+                    <h2>Stopwatch</h2>
+                    <p id="timeDisplay">00:00:00</p>
+                    <button id="startBtn">Start</button>
+                    <button id="pauseBtn">Pause</button>
+                    <button id="resetBtn">Reset</button>
+                </section>
+            </div>
+        </div>
 
-        <section>
-          <h2>Generate Quiz</h2>
-        </section>
-
-        <section>
-          <h2>Homework Tracking</h2>
-        </section>
-
-        <section>
-          <h2>Email your study materials</h2>
-        </section>
-      </div>
-
-      <script type="module" src="/src/main.js"></script>
+        <script type="module" src="/src/main.js"></script>
     </body>
 </html>
