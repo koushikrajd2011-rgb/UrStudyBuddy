@@ -1,0 +1,22 @@
+:root {
+  --bg-color: #f4f7fc;
+  --text-color: #333;
+  --card-bg: white;
+  --accent: #4f46e5;
+  --accent-hover: #3730a3;
+  --border-color: #ccc;
+}
+
+body.dark {
+  --bg-color: #1a1a2e;
+  --text-color: #e5e5e5;
+  --card-bg: #25253d;
+  --accent: #818cf8;
+  --accent-hover: #636ff1;
+  --border-color: #444;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
