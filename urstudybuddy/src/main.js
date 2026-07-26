@@ -122,3 +122,4 @@ if (addRowBtn) {
     timetableBody.appendChild(newRow);
   });
 }
+
