@@ -19,4 +19,61 @@ body.dark {
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: var(--bg-color);
+  color: var(--text-color);
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.container {
+  width: 90%;
+  max-width: 900px;
+  margin: auto;
+  padding: 40px 20px;
+}
+
+h1 {
+  text-align: center;
+  color: var(--accent);
+  font-size: 3rem;
+}
+
+p {
+  text-align: center;
+  margin: 15px 0 30px;
+}
+
+section {
+  margin-top: 35px;
+  background: var(--card-bg);
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: - 3px 10px rgba(0,0,0,0.1);
+  transition: background 0.3s ease;
+}
+
+button {
+  display: block;
+  margin: auto;
+  padding: 12px 30px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--accent-hover);
+}
+
+input, select {
+  display: block;
+  margin: 10px auto;
+  padding: 10px;
+  width: 250px;
 }
