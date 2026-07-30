@@ -83,3 +83,42 @@ input, select {
   background: var(--text-color);
   color: var(--text-color);
 }
+
+.error {
+  color: #e11d48;
+  font-size: 13px;
+  min-height: 18px;
+  text-align: center;
+}
+
+li {
+  list-style: none;
+  padding: 8px;
+  margin: 6px 0;
+  background: var(--bg-color);
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+li.done {
+  text-decoration: line-through;
+  color: gray;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+th, td {
+  border: 1px solid var(--border-color);
+  padding: 8px;
+  text-align: center;
+}
+
+td[contenteditable="true"] {
+  cursor: text;
+}
+
+
