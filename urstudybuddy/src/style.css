@@ -121,4 +121,32 @@ td[contenteditable="true"] {
   cursor: text;
 }
 
+td[contenteditable="true"] {
+  cursor: text;
+}
 
+#addRowBtn {
+  margin-top: 15px;
+}
+
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-color);
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: fadeIn 0.4s ease;
+}
+
+.overlay.visible {
+  display: flex;
+}
+
+overlay-box {
+  text-align: center;
+}
