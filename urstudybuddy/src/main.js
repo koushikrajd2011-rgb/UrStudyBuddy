@@ -5,7 +5,29 @@ function setText(id, text) {
   if (el) el.textContent = text;
 }
 
-// ---- Page switching (replaces separate HTML files) ----
+const darkModeToggle = document.getElementById("darkModeToggle");
+if (localStorage.getItem("darkMode") === "true") {
+  document.body.classList.add("dark");
+  if (darkModeToggle) darkModeToggle.textContent = "Light Mode";
+}
+
+if (darkModeToggle) {
+  darkModeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("dark");
+    const isDark = document.body.classList.contains("dark");
+    localStorage.setItem("darkMode", isDark);
+    darkModeToggle.textContent = isDark ? "Light Mode" : "Dark Mode";
+  });
+}
+
+function updateClock() {
+  const now = new Date();
+  const clockEl = document.getElementById("dockClock");
+  if (clockEl) clockEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit'});
+}
+updateClock();
+setInterval(updateClock, 1000);
+
 window.showPage = function (pageId) {
   document.querySelectorAll(".page").forEach(page => {
     page.style.display = "none";
@@ -13,7 +35,6 @@ window.showPage = function (pageId) {
   document.getElementById(pageId).style.display = "block";
 };
 
-// ---- Name overlay ----
 const showNameBtn = document.getElementById("showNameBtn");
 if (showNameBtn) {
   showNameBtn.addEventListener("click", () => {
@@ -44,7 +65,6 @@ if (addBtn) {
   });
 }
 
-// ---- Homework list ----
 const addTaskBtn = document.getElementById("addTaskBtn");
 if (addTaskBtn) {
   const taskInput = document.getElementById("taskInput");
@@ -63,7 +83,6 @@ if (addTaskBtn) {
   });
 }
 
-// ---- Stopwatch ----
 const startBtn = document.getElementById("startBtn");
 if (startBtn) {
   const pauseBtn = document.getElementById("pauseBtn");
@@ -100,7 +119,6 @@ if (startBtn) {
   });
 }
 
-// ---- Timetable grid ----
 const addRowBtn = document.getElementById("addRowBtn");
 if (addRowBtn) {
   const timetableBody = document.getElementById("timetableBody");

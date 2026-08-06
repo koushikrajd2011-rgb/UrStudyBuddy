@@ -37,7 +37,7 @@
 
         <div id="uploadPage" class="page" style="display:none;">
             <div class="container">
-                <button onclick="showPage('dashboardPage')"></button>Back</button>
+                <button onclick="showPage('dashboardPage')">Back</button>
                 <h1>Upload Your Notes</h1>
                 <p>Upload a PDF and let AI generate fresh notes and a quiz</p>
                 <input type="file" id="pdfInput" accept="application/pdf" />
@@ -87,11 +87,9 @@
             </div>
         </div>
 
-        <nav id="topDock" class="dock" style="display:none;">
+        <nav id="topDock" class="dock">
+            <span id="dockClock" style="padding: 8px 12px; font-size: 14px; font-weight:600;"></span>
             <button onclick="showPage('dashboardPage')" title="Dashboard">Dashboard</button>
-            <button onclick="showPage('uploadPage')" title="Notes & Quiz">Notes & Quiz</button>
-            <button onclick="showPage('timetablePage')" title="Timetable">Timetable</button>
-            <button onclick="showPage('homeworkPage')" title="Homework">Homework</button>
             <button id="darkModeToggle" title="Toggle dark mode">Dark Mode</button>
         </nav>
 
