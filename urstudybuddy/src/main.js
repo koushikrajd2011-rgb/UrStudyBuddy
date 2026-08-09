@@ -20,6 +20,35 @@ if (darkModeToggle) {
   });
 }
 
+function updateDashboardPreview() {
+  const taskListEl = document.getElementById("taskList");
+  const preview = document.getElementById("homeworkPreview");
+  const countText = document.getElementById("taskCountText");
+  if (!taskListEl || !preview || !countText) return;
+
+  const items = Array.from(taskListEl.children);
+  preview.innerHTML = "";
+  items.slice(0,3).forEach(li => {
+    const clone = li.cloneNode(true);
+    clone.style.cursor = "default";
+    preview.appendChild(clone);
+  });
+  const done = items.filter(li => li.classList.contains("done")).length;
+  countText.textContent = `${done}/${items.length} tasks done today`;
+}
+
+function updateStreak() {
+  const today = new Date().toDateString();
+  const lastVisit = localStorage.getItem("lastVisit");
+  let streak = parseInt(localStorage.getItem("streak")) || 0;
+
+  if (lastVisit !== today) {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    streak 
+  }
+}
+
 function updateClock() {
   const now = new Date();
   const clockEl = document.getElementById("dockClock");

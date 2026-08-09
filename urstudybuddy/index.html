@@ -29,6 +29,23 @@
             <div class="container">
                 <h1 id="welcomeText">Dashboard</h1>
                 <p>So what will you be workin with today, </p>
+
+                <section>
+                    <h2>Today's Homework</h2>
+                    <ul id="homeworkPreview"></ul>
+                    <p id="taskCountText"></p>
+                </section>
+
+                <section>
+                    <h2>Study Streak</h2>
+                    <p id="streakText"></p>
+                </section>
+
+                <section>
+                    <h2>Hours Studied Worldwide</h2>
+                    <p id="globalCounter">Loading...</p>
+                </section>
+
                 <button onclick="showPage('uploadPage')">Notes & Quizzes</button>
                 <button onclick="showPage('timetablePage')">Timetable</button>
                 <button onclick="showPage('homeworkPage')">Homework Buddy</button>
@@ -92,6 +109,13 @@
             <button onclick="showPage('dashboardPage')" title="Dashboard">Dashboard</button>
             <button id="darkModeToggle" title="Toggle dark mode">Dark Mode</button>
         </nav>
+
+        <div id="quotePopup" class="overlay">
+            <div class="overlay-box">
+                <p id="quoteText"></p>
+                <button onclick="document.getElementById('quotePopup').classList.remove('visible')">Got it</button>
+            </div>
+        </div>
 
         <script type="module" src="/src/main.js"></script>
     </body>
