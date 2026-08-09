@@ -1,31 +1,42 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600&family=Caveat:wght@600;700&display=swap');
+
 :root {
-  --bg-color: #f4f7fc;
-  --text-color: #333;
-  --card-bg: white;
+  --dock-height: 56px;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-accent: 'Caveat', cursive;
+  --bg-color: #f4f6fb;
+  --text-color: #1f2430;
+  --text-muted: #6b7280;
+  --card-bg: #ffffff;
   --accent: #4f46e5;
-  --accent-hover: #3730a3;
-  --border-color: #ccc;
+  --accent-hover: #4338ca;
+  --coral: #ff6b5b;
+  --border-color: #e5e7eb;
+  --radius: 14px;
 }
 
 body.dark {
-  --bg-color: #1a1a2e;
-  --text-color: #e5e5e5;
-  --card-bg: #25253d;
+  --bg-color: #14141f;
+  --text-color: #eceef2;
+  --text-muted: #9ca3af;
+  --card-bg: #1e1e2e;
   --accent: #818cf8;
-  --accent-hover: #636ff1;
-  --border-color: #444;
+  --accent-hover: #6366f1;
+  --border-color: #2e2e42;
 }
 
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: Arial, sans-serif;
 }
 
 body {
+  font-family: var(--font-body);
   background: var(--bg-color);
   color: var(--text-color);
+  padding-top: var(--dock-height);
   transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -33,55 +44,84 @@ body {
   width: 90%;
   max-width: 900px;
   margin: auto;
-  padding: 40px 20px;
+  padding: 50px 20px;
 }
 
 h1 {
+  font-family: var(--font-heading);
+  font-weight: 700;
   text-align: center;
   color: var(--accent);
-  font-size: 3rem;
+  font-size: 2.4rem;
+  letter-spacing: -0.02em;
+}
+
+h2, h3 {
+  font-family: var(--font-heading);
+  font-weight: 500;
+}
+
+h3 {
+  font-size: 0.95rem;
+  margin-bottom: 10px;
 }
 
 p {
   text-align: center;
-  margin: 15px 0 30px;
+  color: var(--text-muted);
+  margin: 12px 0 28px;
+}
+
+.highlight {
+  color: var(--coral);
+}
+
+.accent {
+  font-family: var(--font-accent);
+  font-size: 1.4rem;
+  color: var(--coral);
 }
 
 section {
-  margin-top: 35px;
+  margin-top: 30px;
   background: var(--card-bg);
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: - 3px 10px rgba(0,0,0,0.1);
-  transition: background 0.3s ease;
+  padding: 24px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  animation: popIn 0.4s ease;
 }
 
 button {
   display: block;
-  margin: auto;
-  padding: 12px 30px;
+  margin: 10px auto;
+  padding: 12px 28px;
   background: var(--accent);
   color: white;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
+  font-family: var(--font-heading);
+  font-weight: 500;
+  font-size: 0.9rem;
   cursor: pointer;
+  transition: transform 0.15s ease, background 0.2s ease;
 }
 
-button:hover {
-  background: var(--accent-hover);
-}
+button:hover { background: var(--accent-hover); }
+button:active { transform: scale(0.93); }
 
 input, select {
   display: block;
   margin: 10px auto;
-  padding: 10px;
+  padding: 10px 14px;
   width: 250px;
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 14px;
   text-align: center;
-  background: var(--text-color);
+  background: var(--card-bg);
   color: var(--text-color);
+  font-family: var(--font-body);
 }
 
 .error {
@@ -93,116 +133,161 @@ input, select {
 
 li {
   list-style: none;
-  padding: 8px;
+  padding: 10px 14px;
   margin: 6px 0;
   background: var(--bg-color);
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 0.9rem;
+  animation: slideInLeft 0.3s ease;
 }
 
-li.done {
-  text-decoration: line-through;
-  color: gray;
+li.done { 
+  text-decoration: line-through; 
+  color: var(--text-muted); 
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 15px;
+table { 
+  width: 100%; border-collapse: collapse; margin-top: 15px; 
 }
-
-th, td {
-  border: 1px solid var(--border-color);
+th, td { 
+  border: 1px solid var(--border-color); 
   padding: 8px;
-  text-align: center;
+  text-align: center; 
 }
 
 td[contenteditable="true"] {
-  cursor: text;
+   cursor: text; 
 }
 
-td[contenteditable="true"] {
-  cursor: text;
+td[contenteditable="true"]:focus { 
+  background: rgba(79,70,229,0.1); 
 }
 
 #addRowBtn {
-  margin-top: 15px;
+   margin-top: 15px;
+ }
+
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin-top: 30px;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: popIn 0.4s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.card-icon {
+  font-size: 24px; 
+  margin-bottom: 8px;
+}
+
+.card-sub {
+  font-size: 0.85rem;
+  color: var(--text-muted); 
+  text-align: left;
+  margin: 0;
+}
+
+.card ul {
+  margin: 0 0 8px 0;
+}
+
+card li {
+  font-size: 0.82rem; 
+  padding: 5px 0; 
+  background: transparent; 
+  margin: 0;
+  animation: none;
 }
 
 .overlay {
   display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   background: var(--bg-color);
   align-items: center;
   justify-content: center;
-  z-index: 100;
-  animation: fadeIn 0.4s ease;
+  z-index: 300;
 }
 
-.overlay.visible {
-  display: flex;
+.overlay.visible { 
+  display: flex; 
+  animation: fadeIn 0.4s ease; 
 }
-
-overlay-box {
-  text-align: center;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0;
-  }
-
-  to { opacity: 1;
-  }
-}
-
-@keyframes slideUp {
-  from { transform: translateY(20px); opacity: 0;}
-  to { transform: translateY(0); opacity: 1;}
-}
-
-.page {
-  display: block;
+.overlay-box {
+  text-align: center; 
+  animation: slideUp 0.5s ease; 
 }
 
 .dock {
   position: fixed;
-  top: 0;
-  left: 0;
+  top: 0; left: 0;
   width: 100%;
-  height: 56px;
+  height: var(--dock-height);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 30px;
   background: rgba(255,255,255,0.75);
   backdrop-filter: blur(12px);
-  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-  z-index: 1000;
-  border-radius: 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  z-index: 200;
 }
 
-body.dark .dock {
-  background: rgba(37, 37, 61, 0.75);
+body.dark .dock { 
+  background: rgba(20,20,31,0.85); 
 }
 
 .dock button {
   display: inline-block;
   margin: 0;
-  padding: 8px 12px;
+  padding: 8px 14px;
   background: transparent;
   color: var(--text-color);
   border: none;
-  border-radius: 12px;
-  font-size: 18px;
+  border-radius: 10px;
+  font-size: 14px;
   cursor: pointer;
   transition: background 0.2s ease, transform 0.15s ease;
 }
 
 .dock button:hover {
-  background: rgba(79, 90, 229, 0.15);
-  transform: translateY(-2px);
+   background: rgba(79,70,229,0.12);
+   transform: translateY(-2px); 
 }
+
+#dockClock { 
+  font-family: var(--font-heading); 
+  font-weight: 600; 
+  font-size: 14px; 
+}
+
+.page { 
+  display: block; 
+}
+
+.page.animate-in { 
+  animation: fadeInUp 0.4s ease; 
+}
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes popIn { from { opacity: 0; transform: scale(0.92); } to { opacity: 1; transform: scale(1); } }
+@keyframes slideInLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
