@@ -70,6 +70,13 @@
         <h1>Upload Your Notes</h1>
         <p>Upload a PDF and let AI generate fresh notes and a quiz</p>
         <input type="file" id="pdfInput" accept="application/pdf" />
+
+        <select id="noteStyle">
+          <option value="bullet">Bullet Points</option>
+          <option value="paragraph">Flowing Paragraphs</option>
+          <option value="flashcard">Flashcard Style</option>
+          <option value="cornell">Cornell Notes (Cue+Summary)</option>
+        </select>
         <button id="generateBtn">Generate</button>
         <p id="statusMsg" class="error"></p>
       </div>
