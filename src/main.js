@@ -285,3 +285,38 @@ if (generateBtn) {
     generateBtn.disabled = false;
   });
 }
+
+const pomodoroStartBtn = document.getElementById("pomodoroStartBtn");
+if (pomodoroStartBtn) {
+  const pomodoroPauseBtn = document.getElementById("pomodoroPauseBtn");
+  const pomodoroResetBtn = document.getElementById("pomodoroResetBtn");
+  let pomodoroSeconds = 25 * 60;
+  let pomodoroMode = "Work";
+  let pomodoroInterval = null;
+
+  function updatePomodoroDisplay() {
+    const mins = String(Math.floor(pomodoroSeconds / 60)).padStart(2, "0");
+    const secs = String(pomodoroSeconds % 60).padStart(2, "0");
+    setText("pomodoroDisplay", `${mins}:${secs}`);
+    setText("pomodoroMode", pomodoroMode);
+  }
+
+  pomodoroStartBtn.addEventListener("click", () => {
+    if (pomodoroInterval !== null) return;
+    pomodoroInterval = setInterval(() => {
+      pomodoroSeconds--;
+      if (pomodoroSeconds <= 0) {
+        pomodoroMode = pomodoroMode === "Work" ? "Break" : "Work";
+        pomodoroSeconds = pomodoroMode === "Work" ? 25 * 60 : 5 * 60;
+      }
+      updatePomodoroDisplay();
+    }, 1000);
+  });
+  pomodoroPauseBtn.addEventListener("click", () => {
+    clearInterval(pomodoroInterval); pomodoroInterval = null;
+  });
+  pomodoroResetBtn.addEventListener("click", () => {
+    clearInterval(pomodoroInterval); pomodoroInterval = null;
+    pomodoroMode = "Work"; pomodoroSeconds = 25 * 60; updatePomodoroDisplay();
+  });
+}
