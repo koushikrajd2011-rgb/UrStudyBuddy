@@ -89,8 +89,23 @@
           <option value="exam">Exam focused, Academic tone</option>
         </select>
         
-        <button id="generateBtn">Generate</button>
+<button id="generateBtn">Generate</button>
         <p id="statusMsg" class="error"></p>
+
+        <div id="resultsBox" style="display:none;">
+          <button onclick="showResultTab('notesTab')">Notes</button>
+          <button onclick="showResultTab('quizTab')" style="margin-top:8px;">Quiz</button>
+
+          <section id="notesTab">
+            <h2>New Notes</h2>
+            <p id="notesContent" style="white-space:pre-wrap; text-align:left;"></p>
+          </section>
+
+          <section id="quizTab" style="display:none;">
+            <h2>Quiz</h2>
+            <div id="quizContent"></div>
+          </section>
+        </div>
       </div>
     </div>
 

@@ -1,4 +1,7 @@
+import { marked } from 'marked'
 import './style.css'
+import * as pdfjsLib from 'pdfjs-dist'
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.min.mjs', import.meta.url).href
 
 function setText(id, text) {
   const el = document.getElementById(id);
@@ -201,3 +204,84 @@ function showRandomQuote() {
   document.getElementById("quotePopup").classList.add("visible");
 }
 setInterval(showRandomQuote, 10 * 60 * 1000);
+
+async function extractPdfText(file) {
+  const arrayBuffer = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+  let fullText = "";
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const page = await pdf.getPage(i);
+    const content = await page.getTextContent();
+    fullText += content.items.map(item => item.str).join(" ") + "\n";
+  }
+  return fullText;
+}
+
+window.showResultTab = function (tabId) {
+  document.getElementById("notesTab").style.display = "none";
+  document.getElementById("quizTab").style.display = "none";
+  document.getElementById(tabId).style.display = "block";
+};
+
+const generateBtn = document.getElementById("generateBtn");
+if (generateBtn) {
+  const pdfInput = document.getElementById("pdfInput");
+  const statusMsg = document.getElementById("statusMsg");
+  const resultsBox = document.getElementById("resultsBox");
+
+  generateBtn.addEventListener("click", async () => {
+    const file = pdfInput.files[0];
+    if (!file) {
+      statusMsg.textContent = "Please choose a PDF first.";
+      return;
+    }
+
+    const noteStyle = document.getElementById("noteStyle").value;
+    const detailLevel = document.getElementById("detailLevel").value;
+    const tone = document.getElementById("tone").value;
+
+    statusMsg.textContent = "Reading PDF...";
+    generateBtn.disabled = true;
+
+    try {
+      const extractedText = await extractPdfText(file);
+      statusMsg.textContent = "Generating notes and quiz...";
+
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: extractedText, noteStyle, detailLevel, tone })
+      });
+
+      const data = await res.json();
+      if (data.error) throw new Error(data.error);
+
+     document.getElementById("notesContent").innerHTML = marked.parse(data.notes);
+
+      const quizContent = document.getElementById("quizContent");
+      quizContent.innerHTML = "";
+      data.quiz.forEach((q, i) => {
+        const qDiv = document.createElement("div");
+        qDiv.style.marginBottom = "16px";
+        qDiv.style.textAlign = "left";
+        qDiv.innerHTML = `<strong>${i + 1}. ${q.question}</strong>`;
+        q.options.forEach((opt, idx) => {
+          const optP = document.createElement("p");
+          optP.textContent = `${String.fromCharCode(65 + idx)}. ${opt}`;
+          optP.style.textAlign = "left";
+          optP.style.margin = "4px 0";
+          qDiv.appendChild(optP);
+        });
+        quizContent.appendChild(qDiv);
+      });
+
+      statusMsg.textContent = "";
+      resultsBox.style.display = "block";
+    } catch (err) {
+      console.error(err);
+      statusMsg.textContent = "Something went wrong. Try again.";
+    }
+
+    generateBtn.disabled = false;
+  });
+}
