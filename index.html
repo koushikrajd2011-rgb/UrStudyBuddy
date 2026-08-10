@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UrStudyBuddy</title>
+    <link rel="stylesheet" href="/src/style.css">
+  </head>
+  <body>
+
+    <nav id="topDock" class="dock">
+      <span id="dockClock"></span>
+      <button onclick="showPage('dashboardPage')">Dashboard</button>
+      <button id="darkModeToggle">Dark Mode</button>
+    </nav>
+
+    <div id="nameOverlay" class="overlay">
+      <div class="overlay-box">
+        <h1>UrStudyBuddy</h1>
+        <p>What should we call you?</p>
+        <input type="text" id="nameInput" placeholder="Enter your name" maxlength="20" />
+        <p id="errorMsg" class="error"></p>
+        <button id="addBtn">Get goin'!</button>
+      </div>
+    </div>
+
+    <div id="landingPage" class="page">
+      <div class="container">
+        <h1>UrStudyBuddy</h1>
+        <p>Your study companion. It is <span class="highlight">AI powered</span></p>
+        <button id="showNameBtn">Get Started</button>
+      </div>
+    </div>
+
+    <div id="dashboardPage" class="page" style="display:none;">
+      <div class="container">
+        <h1 id="welcomeText">Dashboard</h1>
+        <p>So what will you be workin with today</p>
+
+        <div class="dashboard-cards">
+          <div class="card">
+            <div class="card-icon">📚</div>
+            <h3>Today's Homework</h3>
+            <ul id="homeworkPreview"></ul>
+            <p id="taskCountText" class="card-sub"></p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🔥</div>
+            <h3>Study Streak</h3>
+            <p id="streakText" class="accent"></p>
+          </div>
+
+          <div class="card">
+            <div class="card-icon">🌍</div>
+            <h3>Hours Studied Worldwide</h3>
+            <p id="globalCounter" class="card-sub"></p>
+          </div>
+        </div>
+
+        <button onclick="showPage('uploadPage')" style="margin-top:30px;">Notes & Quizzes</button>
+        <button onclick="showPage('timetablePage')" style="margin-top:12px;">Timetable</button>
+        <button onclick="showPage('homeworkPage')" style="margin-top:12px;">Homework & Stopwatch</button>
+      </div>
+    </div>
+
+    <div id="uploadPage" class="page" style="display:none;">
+      <div class="container">
+        <button onclick="showPage('dashboardPage')">← Back</button>
+        <h1>Upload Your Notes</h1>
+        <p>Upload a PDF and let AI generate fresh notes and a quiz</p>
+        <input type="file" id="pdfInput" accept="application/pdf" />
+
+        <select id="noteStyle">
+          <option value="bullet">Bullet points</option>
+          <option value="paragraph">Flowing paragraphs</option>
+          <option value="flashcard">Flashcard style</option>
+          <option value="cornell">Cornell notes (Cue+Summary)</option>
+        </select>
+
+        <select id="detailLevel">
+          <option value="concise">Concise summary</option>
+          <option value="detailed">Detailed explanation</option>
+          <option value="eli5">Explain like I'm new to this.</option>
+        </select>
+
+        <select id="tone">
+          <option value="simple">Simple, Everyday Language</option>
+          <option value="exam">Exam focused, Academic tone</option>
+        </select>
+        
+        <button id="generateBtn">Generate</button>
+        <p id="statusMsg" class="error"></p>
+      </div>
+    </div>
+
+    <div id="timetablePage" class="page" style="display:none;">
+      <div class="container">
+        <button onclick="showPage('dashboardPage')">← Back</button>
+        <h1>Timetable</h1>
+        <p id="timetableGreeting" class="accent"></p>
+        <section>
+          <h2>Your Week</h2>
+          <table>
+            <thead>
+              <tr><th>Time</th><th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th></tr>
+            </thead>
+            <tbody id="timetableBody"></tbody>
+          </table>
+          <button id="addRowBtn">+</button>
+        </section>
+      </div>
+    </div>
+
+    <div id="homeworkPage" class="page" style="display:none;">
+      <div class="container">
+        <button onclick="showPage('dashboardPage')">← Back</button>
+        <h1>Homework & Stopwatch</h1>
+        <p id="homeworkGreeting" class="accent"></p>
+
+        <section>
+          <h2>Homework List</h2>
+          <input type="text" id="taskInput" placeholder="Add a task..." />
+          <button id="addTaskBtn">Add</button>
+          <ul id="taskList"></ul>
+        </section>
+
+        <section>
+          <h2>Stopwatch</h2>
+          <p id="timeDisplay">00:00</p>
+          <button id="startBtn">Start</button>
+          <button id="pauseBtn" style="margin-top:8px;">Pause</button>
+          <button id="resetBtn" style="margin-top:8px;">Reset</button>
+        </section>
+
+        <section>
+            <h2>Focus Timer (Pomodoro)</h2>
+            <p id="pomodoroMode" class="accent">Work</p>
+            <p id="pomodoroDisplay">25:00</p>
+            <button id="pomodoroStartBtn">Start</button>
+            <button id="pomodoroPauseBtn" style="margin-top:8px;">Pause</button>
+            <button id="pomodoroResetBtn" style="margin-top:8px;">Reset</button>
+        </section>
+      </div>
+    </div>
+
+    <div id="quotePopup" class="overlay">
+      <div class="overlay-box">
+        <p id="quoteText" class="accent" style="font-size:1.6rem;"></p>
+        <button onclick="document.getElementById('quotePopup').classList.remove('visible')">Got it</button>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
