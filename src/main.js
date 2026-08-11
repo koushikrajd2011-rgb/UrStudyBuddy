@@ -320,3 +320,20 @@ if (pomodoroStartBtn) {
     pomodoroMode = "Work"; pomodoroSeconds = 25 * 60; updatePomodoroDisplay();
   });
 }
+
+const dashboardPage = document.getElementById("dashboardPage");
+if (dashboardPage) {
+  dashboardPage.addEventListener("click", (e) => {
+    if (e.target.closest("button") | e.target.closest(".card")) return;
+
+    const size = 300;
+    const ripple = document.createElement("div");
+    ripple.classList.add("ripple");
+    ripple.style.width = ripple.style.height = `${size}px`;
+    ripple.style.left = `${e.clientX - size / 2}px`;
+    ripple.style.top = `${e.clientY - size / 2}px`;
+
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 800);
+  });
+}

@@ -5,25 +5,25 @@
   --font-heading: 'Space Grotesk', sans-serif;
   --font-body: 'Inter', sans-serif;
   --font-accent: 'Caveat', cursive;
-  --bg-color: #f4f6fb;
-  --text-color: #1f2430;
-  --text-muted: #6b7280;
-  --card-bg: #ffffff;
-  --accent: #4f46e5;
-  --accent-hover: #4338ca;
-  --coral: #ff6b5b;
-  --border-color: #e5e7eb;
+  --bg-color: #F5F2EC;
+  --text-color: #3A352C;
+  --text-muted: #8A8171;
+  --card-bg: #FFFFFF;
+  --accent: #A69374;
+  --accent-hover: #8B7A5E;
+  --coral: #E8734A;
+  --border-color: #DAD6CE;
   --radius: 14px;
 }
 
 body.dark {
-  --bg-color: #14141f;
-  --text-color: #eceef2;
-  --text-muted: #9ca3af;
-  --card-bg: #1e1e2e;
-  --accent: #818cf8;
-  --accent-hover: #6366f1;
-  --border-color: #2e2e42;
+  --bg-color: #26231D;
+  --text-color: #EDE8DD;
+  --text-muted: #A69B87;
+  --card-bg: #322E25;
+  --accent: #C4B296;
+  --accent-hover: #D8C7A8;
+  --border-color: #443F32;
 }
 
 * {
@@ -104,11 +104,18 @@ button {
   font-weight: 500;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: transform 0.15s ease, background 0.2s ease;
+  box-shadow: 0 4px 0 var(--accent-hover), 0 6px 12px rgba(0,0,0,0.15);
+  transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.2s ease;
 }
 
-button:hover { background: var(--accent-hover); }
-button:active { transform: scale(0.93); }
+button:hover {
+  background: var(--accent-hover);
+}
+
+button:active {
+  transform: translateY(4px);
+  box-shadow: 0 0 0 var(--accent-hover), 0 2px 4px rgba(0,0,0,0.15);
+}
 
 input, select {
   display: block;
@@ -142,31 +149,34 @@ li {
   animation: slideInLeft 0.3s ease;
 }
 
-li.done { 
-  text-decoration: line-through; 
-  color: var(--text-muted); 
+li.done {
+  text-decoration: line-through;
+  color: var(--text-muted);
 }
 
-table { 
-  width: 100%; border-collapse: collapse; margin-top: 15px; 
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
 }
-th, td { 
-  border: 1px solid var(--border-color); 
+
+th, td {
+  border: 1px solid var(--border-color);
   padding: 8px;
-  text-align: center; 
+  text-align: center;
 }
 
 td[contenteditable="true"] {
-   cursor: text; 
+  cursor: text;
 }
 
-td[contenteditable="true"]:focus { 
-  background: rgba(79,70,229,0.1); 
+td[contenteditable="true"]:focus {
+  background: rgba(166,147,116,0.15);
 }
 
 #addRowBtn {
-   margin-top: 15px;
- }
+  margin-top: 15px;
+}
 
 .dashboard-cards {
   display: grid;
@@ -191,13 +201,13 @@ td[contenteditable="true"]:focus {
 }
 
 .card-icon {
-  font-size: 24px; 
+  font-size: 24px;
   margin-bottom: 8px;
 }
 
 .card-sub {
   font-size: 0.85rem;
-  color: var(--text-muted); 
+  color: var(--text-muted);
   text-align: left;
   margin: 0;
 }
@@ -206,10 +216,10 @@ td[contenteditable="true"]:focus {
   margin: 0 0 8px 0;
 }
 
-card li {
-  font-size: 0.82rem; 
-  padding: 5px 0; 
-  background: transparent; 
+.card li {
+  font-size: 0.82rem;
+  padding: 5px 0;
+  background: transparent;
   margin: 0;
   animation: none;
 }
@@ -217,26 +227,30 @@ card li {
 .overlay {
   display: none;
   position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   background: var(--bg-color);
   align-items: center;
   justify-content: center;
   z-index: 300;
 }
 
-.overlay.visible { 
-  display: flex; 
-  animation: fadeIn 0.4s ease; 
+.overlay.visible {
+  display: flex;
+  animation: fadeIn 0.4s ease;
 }
+
 .overlay-box {
-  text-align: center; 
-  animation: slideUp 0.5s ease; 
+  text-align: center;
+  animation: slideUp 0.5s ease;
 }
 
 .dock {
   position: fixed;
-  top: 0; left: 0;
+  top: 0;
+  left: 0;
   width: 100%;
   height: var(--dock-height);
   display: flex;
@@ -249,8 +263,8 @@ card li {
   z-index: 200;
 }
 
-body.dark .dock { 
-  background: rgba(20,20,31,0.85); 
+body.dark .dock {
+  background: rgba(38,35,29,0.85);
 }
 
 .dock button {
@@ -267,22 +281,22 @@ body.dark .dock {
 }
 
 .dock button:hover {
-   background: rgba(79,70,229,0.12);
-   transform: translateY(-2px); 
+  background: rgba(166,147,116,0.15);
+  transform: translateY(-2px);
 }
 
-#dockClock { 
-  font-family: var(--font-heading); 
-  font-weight: 600; 
-  font-size: 14px; 
+#dockClock {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: 14px;
 }
 
-.page { 
-  display: block; 
+.page {
+  display: block;
 }
 
-.page.animate-in { 
-  animation: fadeInUp 0.4s ease; 
+.page.animate-in {
+  animation: fadeInUp 0.4s ease;
 }
 
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -291,4 +305,16 @@ body.dark .dock {
 @keyframes slideInLeft { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
 @keyframes fadeInUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
+.ripple {
+  position: fixed;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(166,147,116,0.35) 0%, rgba(166,147,116,0) 70%);
+  transform: scale(0);
+  animation: rippleEffect 0.8s ease-out forwards;
+  pointer-events: none;
+  z-index: 5;
+}
 
+@keyframes rippleEffect {
+  to { transform: scale(1); opacity: 0; }
+}
