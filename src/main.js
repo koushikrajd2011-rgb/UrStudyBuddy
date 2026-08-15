@@ -181,8 +181,9 @@ async function loadGlobalMinutes() {
   }
 }
 async function incrementGlobalMinutes() {
-  try { await fetch("https://api.countapi.xyz/update/urstudybuddy/minutesstudied/?amount=1"); } catch (e) {}
+  try { await fetch("https://countapi.mileshilliard.com/api/v1/hit/urstudybuddy_minutesstudied"); } catch (e) {}
 }
+
 loadGlobalMinutes();
 setInterval(incrementGlobalMinutes, 60000);
 setInterval(loadGlobalMinutes, 65000);
@@ -335,5 +336,25 @@ if (dashboardPage) {
 
     document.body.appendChild(ripple);
     setTimeout(() => ripple.remove(), 800);
+  });
+}
+
+const emailBtn = document.getElementById("emailBtn");
+if (emailBtn) {
+  emailBtn.addEventListener("click", async () => {
+    const notes = document.getElementById("notesContent").innerText;
+    const name = sessionStorage.getItem("userName") || "Student";
+    const subject = encodeURIComponent(`${name}'s UrStudyBuddy Notes`);
+    const body = encodeURIComponent(`Here are your generated study notes:\n\n${notes}`);
+
+    const mailtoLink = `mailto:?subject=${subject}&body=${body}`;
+    window.location.href = mailtoLink;
+
+    setTimeout(async () => {
+      try {
+        await navigator.clipboard.writeText(notes);
+        alert("If your email app didn't open, your notes have been copied — paste them into any email.");
+      } catch (e) {}
+    }, 500);
   });
 }
