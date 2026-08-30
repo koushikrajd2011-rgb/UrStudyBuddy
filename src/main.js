@@ -325,7 +325,7 @@ if (pomodoroStartBtn) {
 const dashboardPage = document.getElementById("dashboardPage");
 if (dashboardPage) {
   dashboardPage.addEventListener("click", (e) => {
-    if (e.target.closest("button") | e.target.closest(".card")) return;
+    if (e.target.closest("button") || e.target.closest(".card")) return;
 
     const size = 300;
     const ripple = document.createElement("div");
