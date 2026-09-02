@@ -14,13 +14,28 @@
       <button id="darkModeToggle">Dark Mode</button>
     </nav>
 
-    <div id="nameOverlay" class="overlay">
+    <div id="authOverlay" class="overlay">
       <div class="overlay-box">
         <h1>UrStudyBuddy</h1>
-        <p>What should we call you?</p>
-        <input type="text" id="nameInput" placeholder="Enter your name" maxlength="20" />
-        <p id="errorMsg" class="error"></p>
-        <button id="addBtn">Get goin'!</button>
+
+        <div id="loginForm">
+          <p>Log in</p>
+          <input type="text" id="loginUsername" placeholder="Username" maxlength="20" />
+          <input type="password" id="loginPassword" placeholder="Password" maxlength="30" />
+          <p id="loginError" class="error"></p>
+          <button id="loginBtn">Log In</button>
+          <p class="accent" style="cursor:pointer;" onclick="toggleAuthForm('signup')">No account? Sign up</p>
+        </div>
+
+        <div id="signupForm" style="display:none;">
+          <p>Create an account</p>
+          <input type="text" id="signupUsername" placeholder="Choose a username" maxlength="20" />
+          <input type="email" id="signupEmail" placeholder="Your email" />
+          <input type="password" id="signupPassword" placeholder="Choose a password" maxlength="30" />
+          <p id="signupError" class="error"></p>
+          <button id="signupBtn">Sign Up</button>
+          <p class="accent" style="cursor:pointer;" onclick="toggleAuthForm('login')">Already have an account? Log in</p>
+        </div>
       </div>
     </div>
 
@@ -28,7 +43,7 @@
       <div class="container">
         <h1>UrStudyBuddy</h1>
         <p>Your study companion. It is <span class="highlight">AI powered</span></p>
-        <button id="showNameBtn">Get Started</button>
+        <button id="showAuthBtn">Get Started</button>
       </div>
     </div>
 
@@ -58,7 +73,6 @@
           </div>
         </div>
 
-        <button onclick="showPage('FocusRoom')" style="margin-top:12px;">Focus Room</button>
         <button onclick="showPage('uploadPage')" style="margin-top:30px;">Notes & Quizzes</button>
         <button onclick="showPage('timetablePage')" style="margin-top:12px;">Timetable</button>
         <button onclick="showPage('homeworkPage')" style="margin-top:12px;">Homework & Stopwatch</button>
