@@ -38,37 +38,96 @@ window.showPage = function (pageId) {
   target.classList.add("animate-in");
 };
 
-const showNameBtn = document.getElementById("showNameBtn");
-if (showNameBtn) {
-  showNameBtn.addEventListener("click", () => {
-    document.getElementById("nameOverlay").classList.add("visible");
+const showAuthBtn = document.getElementById("showAuthBtn");
+if (showAuthBtn) {
+  showAuthBtn.addEventListener("click", () => {
+    document.getElementById("authOverlay").classList.add("visible");
   });
 }
 
-const addBtn = document.getElementById("addBtn");
-if (addBtn) {
-  const nameInput = document.getElementById("nameInput");
-  const errorMsg = document.getElementById("errorMsg");
+window.toggleAuthForm = function (form) {
+  document.getElementById("loginForm").style.display = form === "login" ? "block" : "none";
+  document.getElementById("signupForm").style.display = form === "signup" ? "block" : "none";
+  document.getElementById("loginError").textContent = "";
+  document.getElementById("signupError").textContent = "";
+};
 
-  addBtn.addEventListener("click", () => {
-    const enteredName = nameInput.value.trim();
+function completeLogin(username, email) {
+  sessionStorage.setItem("userName", username);
+  sessionStorage.setItem("userEmail", email || "");
+  document.getElementById("authOverlay").classList.remove("visible");
+  document.getElementById("landingPage").style.display = "none";
+  showPage("dashboardPage");
 
-    if (enteredName === "") {
-      errorMsg.textContent = "Please enter your name.";
+  setText("welcomeText", `Welcome, ${username}!`);
+  setText("homeworkGreeting", `Hey ${username}, ready to tackle homework?`);
+  setText("timetableGreeting", `${username}'s Weekly Schedule`);
+  updateStreak();
+  updateDashboardPreview();
+}
+
+const signupBtn = document.getElementById("signupBtn");
+if (signupBtn) {
+  signupBtn.addEventListener("click", async () => {
+    const username = document.getElementById("signupUsername").value.trim();
+    const email = document.getElementById("signupEmail").value.trim();
+    const password = document.getElementById("signupPassword").value;
+    const errorEl = document.getElementById("signupError");
+
+    if (username === "" || email === "" || password === "") {
+      errorEl.textContent = "Fill in all fields.";
       return;
     }
 
-    sessionStorage.setItem("userName", enteredName);
-    document.getElementById("nameOverlay").classList.remove("visible");
-    document.getElementById("landingPage").style.display = "none";
-    showPage("dashboardPage");
+    try {
+      const res = await fetch('/api/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password })
+      });
+      const data = await res.json();
 
-    const name = sessionStorage.getItem("userName") || "Student";
-    setText("welcomeText", `Welcome, ${name}!`);
-    setText("homeworkGreeting", `Hey ${name}, ready to tackle homework?`);
-    setText("timetableGreeting", `${name}'s Weekly Schedule`);
-    updateStreak();
-    updateDashboardPreview();
+      if (data.error) {
+        errorEl.textContent = data.error;
+        return;
+      }
+
+      completeLogin(data.username, data.email);
+    } catch (err) {
+      errorEl.textContent = "Something went wrong. Try again.";
+    }
+  });
+}
+
+const loginBtn = document.getElementById("loginBtn");
+if (loginBtn) {
+  loginBtn.addEventListener("click", async () => {
+    const username = document.getElementById("loginUsername").value.trim();
+    const password = document.getElementById("loginPassword").value;
+    const errorEl = document.getElementById("loginError");
+
+    if (username === "" || password === "") {
+      errorEl.textContent = "Fill in both fields.";
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+
+      if (data.error) {
+        errorEl.textContent = data.error;
+        return;
+      }
+
+      completeLogin(data.username, data.email);
+    } catch (err) {
+      errorEl.textContent = "Something went wrong. Try again.";
+    }
   });
 }
 
@@ -172,7 +231,7 @@ function updateStreak() {
 
 async function loadGlobalMinutes() {
   try {
-    const res = await fetch("https://api.countapi.xyz/get/urstudybuddy/minutesstudied");
+    const res = await fetch("https://countapi.mileshilliard.com/api/v1/get/urstudybuddy_minutesstudied");
     const data = await res.json();
     const total = data.value || 0;
     setText("globalCounter", `${Math.floor(total / 60)}h ${total % 60}m studied by students worldwide`);
@@ -257,7 +316,7 @@ if (generateBtn) {
       const data = await res.json();
       if (data.error) throw new Error(data.error);
 
-     document.getElementById("notesContent").innerHTML = marked.parse(data.notes);
+      document.getElementById("notesContent").innerHTML = marked.parse(data.notes);
 
       const quizContent = document.getElementById("quizContent");
       quizContent.innerHTML = "";
@@ -344,10 +403,11 @@ if (emailBtn) {
   emailBtn.addEventListener("click", async () => {
     const notes = document.getElementById("notesContent").innerText;
     const name = sessionStorage.getItem("userName") || "Student";
+    const userEmail = sessionStorage.getItem("userEmail") || "";
     const subject = encodeURIComponent(`${name}'s UrStudyBuddy Notes`);
     const body = encodeURIComponent(`Here are your generated study notes:\n\n${notes}`);
 
-    const mailtoLink = `mailto:?subject=${subject}&body=${body}`;
+    const mailtoLink = `mailto:${userEmail}?subject=${subject}&body=${body}`;
     window.location.href = mailtoLink;
 
     setTimeout(async () => {
