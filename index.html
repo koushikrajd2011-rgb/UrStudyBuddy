@@ -15,29 +15,57 @@
     </nav>
 
     <div id="authOverlay" class="overlay">
-      <div class="overlay-box">
-        <h1>UrStudyBuddy</h1>
+  <div class="auth-box">
 
-        <div id="loginForm">
-          <p>Log in</p>
-          <input type="text" id="loginUsername" placeholder="Username" maxlength="20" />
-          <input type="password" id="loginPassword" placeholder="Password" maxlength="30" />
-          <p id="loginError" class="error"></p>
-          <button id="loginBtn">Log In</button>
-          <p class="accent" style="cursor:pointer;" onclick="toggleAuthForm('signup')">No account? Sign up</p>
-        </div>
-
-        <div id="signupForm" style="display:none;">
-          <p>Create an account</p>
-          <input type="text" id="signupUsername" placeholder="Choose a username" maxlength="20" />
-          <input type="email" id="signupEmail" placeholder="Your email" />
-          <input type="password" id="signupPassword" placeholder="Choose a password" maxlength="30" />
-          <p id="signupError" class="error"></p>
-          <button id="signupBtn">Sign Up</button>
-          <p class="accent" style="cursor:pointer;" onclick="toggleAuthForm('login')">Already have an account? Log in</p>
-        </div>
+    <div class="bot-scene">
+      <div class="landscape">
+        <div class="sun"></div>
+        <div class="cloud cloud1"></div>
+        <div class="cloud cloud2"></div>
+        <div class="hill"></div>
+      </div>
+      <div id="studyBot" class="bot">
+        <div class="bot-eye" style="left:28%;"><div class="bot-pupil"></div></div>
+        <div class="bot-eye" style="left:58%;"><div class="bot-pupil"></div></div>
+        <div id="botMouth" class="bot-mouth"></div>
       </div>
     </div>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="loginTabBtn" onclick="toggleAuthForm('login')">Log In</button>
+      <button class="auth-tab" id="signupTabBtn" onclick="toggleAuthForm('signup')">Sign Up</button>
+    </div>
+
+    <div id="loginForm">
+      <input type="text" id="loginUsername" placeholder="Username" maxlength="20" />
+      <input type="password" id="loginPassword" placeholder="Password" maxlength="30" />
+      <p id="loginError" class="error"></p>
+      <button id="loginBtn">Log In</button>
+    </div>
+
+    <div id="signupForm" style="display:none;">
+      <input type="text" id="signupUsername" placeholder="Choose a username" maxlength="20" />
+      <input type="email" id="signupEmail" placeholder="Your email" />
+      <select id="signupGrade">
+        <option value="">Select your grade</option>
+        <option value="6">Grade 6</option>
+        <option value="7">Grade 7</option>
+        <option value="8">Grade 8</option>
+        <option value="9">Grade 9</option>
+        <option value="10">Grade 10</option>
+        <option value="11">Grade 11</option>
+        <option value="12">Grade 12</option>
+        <option value="college">College</option>
+      </select>
+      <input type="password" id="signupPassword" placeholder="Choose a password" maxlength="30" />
+      <p id="signupError" class="error"></p>
+      <button id="signupBtn">Sign Up</button>
+    </div>
+
+  </div>
+</div>
+ 
+
 
     <div id="landingPage" class="page">
       <div class="container">

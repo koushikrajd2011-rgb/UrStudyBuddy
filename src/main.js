@@ -48,22 +48,61 @@ if (showAuthBtn) {
 window.toggleAuthForm = function (form) {
   document.getElementById("loginForm").style.display = form === "login" ? "block" : "none";
   document.getElementById("signupForm").style.display = form === "signup" ? "block" : "none";
+  document.getElementById("loginTabBtn").classList.toggle("active", form === "login");
+  document.getElementById("signupTabBtn").classList.toggle("active", form === "signup");
   document.getElementById("loginError").textContent = "";
   document.getElementById("signupError").textContent = "";
 };
 
+document.addEventListener('mousemove', (e) => {
+  document.querySelectorAll('.bot-pupil').forEach(pupil => {
+    const eye = pupil.parentElement;
+    const rect = eye.getBoundingClientRect();
+    const eyeCenterX = rect.left + rect.width / 2;
+    const eyeCenterY = rect.top + rect.height / 2;
+    const angle = Math.atan2(e.clientY - eyeCenterY, e.clientX - eyeCenterX);
+    const dist = 4;
+    pupil.style.transform = `translate(${Math.cos(angle) * dist}px, ${Math.sin(angle) * dist}px)`;
+  });
+});
+
+function setBotMood(mood) {
+  const bot = document.getElementById("studyBot");
+  if (!bot) return;
+  bot.classList.remove("error", "happy");
+  if (mood !== "neutral") bot.classList.add(mood);
+  if (mood === "error") setTimeout(() => bot.classList.remove("error"), 1200);
+}
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+const signupEmailInput = document.getElementById("signupEmail");
+if (signupEmailInput) {
+  signupEmailInput.addEventListener("blur", () => {
+    if (signupEmailInput.value.trim() !== "" && !isValidEmail(signupEmailInput.value.trim())) {
+      setBotMood("error");
+    }
+  });
+}
+
 function completeLogin(username, email) {
   sessionStorage.setItem("userName", username);
   sessionStorage.setItem("userEmail", email || "");
-  document.getElementById("authOverlay").classList.remove("visible");
-  document.getElementById("landingPage").style.display = "none";
-  showPage("dashboardPage");
+  setBotMood("happy");
 
-  setText("welcomeText", `Welcome, ${username}!`);
-  setText("homeworkGreeting", `Hey ${username}, ready to tackle homework?`);
-  setText("timetableGreeting", `${username}'s Weekly Schedule`);
-  updateStreak();
-  updateDashboardPreview();
+  setTimeout(() => {
+    document.getElementById("authOverlay").classList.remove("visible");
+    document.getElementById("landingPage").style.display = "none";
+    showPage("dashboardPage");
+
+    setText("welcomeText", `Welcome, ${username}!`);
+    setText("homeworkGreeting", `Hey ${username}, ready to tackle homework?`);
+    setText("timetableGreeting", `${username}'s Weekly Schedule`);
+    updateStreak();
+    updateDashboardPreview();
+  }, 600);
 }
 
 const signupBtn = document.getElementById("signupBtn");
@@ -71,11 +110,18 @@ if (signupBtn) {
   signupBtn.addEventListener("click", async () => {
     const username = document.getElementById("signupUsername").value.trim();
     const email = document.getElementById("signupEmail").value.trim();
+    const grade = document.getElementById("signupGrade").value;
     const password = document.getElementById("signupPassword").value;
     const errorEl = document.getElementById("signupError");
 
     if (username === "" || email === "" || password === "") {
       errorEl.textContent = "Fill in all fields.";
+      setBotMood("error");
+      return;
+    }
+    if (!isValidEmail(email)) {
+      errorEl.textContent = "That doesn't look like a valid email.";
+      setBotMood("error");
       return;
     }
 
@@ -83,18 +129,20 @@ if (signupBtn) {
       const res = await fetch('/api/signup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, email, password })
+        body: JSON.stringify({ username, email, password, grade })
       });
       const data = await res.json();
 
       if (data.error) {
         errorEl.textContent = data.error;
+        setBotMood("error");
         return;
       }
 
       completeLogin(data.username, data.email);
     } catch (err) {
       errorEl.textContent = "Something went wrong. Try again.";
+      setBotMood("error");
     }
   });
 }
@@ -108,6 +156,7 @@ if (loginBtn) {
 
     if (username === "" || password === "") {
       errorEl.textContent = "Fill in both fields.";
+      setBotMood("error");
       return;
     }
 
@@ -121,12 +170,14 @@ if (loginBtn) {
 
       if (data.error) {
         errorEl.textContent = data.error;
+        setBotMood("error");
         return;
       }
 
       completeLogin(data.username, data.email);
     } catch (err) {
       errorEl.textContent = "Something went wrong. Try again.";
+      setBotMood("error");
     }
   });
 }
