@@ -129,6 +129,13 @@ input, select {
   background: var(--card-bg);
   color: var(--text-color);
   font-family: var(--font-body);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(166,147,116,0.15);
 }
 
 .error {
@@ -231,7 +238,8 @@ td[contenteditable="true"]:focus {
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--bg-color);
+  background: rgba(58,53,44,0.35);
+  backdrop-filter: blur(4px);
   align-items: center;
   justify-content: center;
   z-index: 300;
@@ -277,7 +285,13 @@ body.dark .dock {
   border-radius: 10px;
   font-size: 14px;
   cursor: pointer;
+  box-shadow: none;
   transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.dock button:active {
+  transform: none;
+  box-shadow: none;
 }
 
 .dock button:hover {
@@ -321,38 +335,38 @@ body.dark .dock {
 
 @media print {
   .dock, .overlay, button { display:none !important; }
-  body { padding-top: 0;}
+  body { padding-top: 0; }
 }
 
 .auth-box {
   background: var(--card-bg);
-  border-radius: 20px;
-  padding: 24px;
-  width: 320px;
+  border-radius: 24px;
+  padding: 28px 26px;
+  width: 340px;
   max-width: 90vw;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+  box-shadow: 0 25px 60px rgba(0,0,0,0.2);
   animation: slideUp 0.5s ease;
   text-align: center;
 }
 
 .bot-scene {
   position: relative;
-  height: 160px;
-  border-radius: 14px;
+  height: 190px;
+  border-radius: 16px;
   overflow: hidden;
-  margin-bottom: 20px;
+  margin-bottom: 22px;
 }
 
 .landscape {
   position: absolute;
   inset: 0;
-  background: linear-gradient(#BEE3F5 0%, #DCEEF9 60%, #E8F4E0 60%, #E8F4E0 100%);
+  background: linear-gradient(#BEE3F5 0%, #DCEEF9 55%, #E8F4E0 55%, #E8F4E0 100%);
 }
 
 .sun {
   position: absolute;
-  top: 14px;
-  right: 20px;
+  top: 16px;
+  right: 24px;
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -368,8 +382,8 @@ body.dark .dock {
   border-radius: 20px;
   opacity: 0.8;
 }
-.cloud1 { top: 20px; left: 20px; }
-.cloud2 { top: 35px; left: 70px; width: 26px; }
+.cloud1 { top: 24px; left: 22px; }
+.cloud2 { top: 40px; left: 74px; width: 26px; }
 
 .hill {
   position: absolute;
@@ -383,26 +397,60 @@ body.dark .dock {
 
 .bot {
   position: absolute;
-  bottom: 20px;
+  bottom: 46px;
   left: 50%;
-  transform: translateX(-50%);
-  width: 90px;
-  height: 70px;
-  background: var(--accent);
-  border-radius: 40px 40px 34px 34px;
+  isolation: isolate;
+  width: 130px;
+  height: 58px;
+  background: #FFFFFF;
+  border: 2px solid #DCEEF9;
+  border-radius: 34px;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
   transition: background 0.3s ease;
+  animation: botFloat 3s ease-in-out infinite;
 }
 
-.bot.error { background: #D9534F; }
-.bot.happy { background: #6FBF73; }
+@keyframes botFloat {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(-6px); }
+}
+
+.bot::before,
+.bot::after {
+  content: "";
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.bot::before {
+  width: 50px;
+  height: 50px;
+  top: -20px;
+  left: 14px;
+}
+
+.bot::after {
+  width: 62px;
+  height: 62px;
+  top: -28px;
+  right: 10px;
+}
+
+.bot.error { background: #F2A0A0; }
+.bot.happy { background: #B8E6C1; }
 
 .bot-eye {
   position: absolute;
-  top: 22px;
+  top: 18px;
   width: 18px;
   height: 18px;
   background: white;
+  border: 1.5px solid #DCEEF9;
   border-radius: 50%;
+  z-index: 2;
+  animation: botBlink 4s ease-in-out infinite;
 }
 
 .bot-pupil {
@@ -416,22 +464,28 @@ body.dark .dock {
   transition: transform 0.05s linear;
 }
 
+@keyframes botBlink {
+  0%, 92%, 100% { height: 18px; }
+  95% { height: 2px; }
+}
+
 .bot-mouth {
   position: absolute;
-  bottom: 14px;
+  bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
   width: 24px;
   height: 12px;
-  border-bottom: 3px solid white;
+  border-bottom: 3px solid #6B7280;
   border-radius: 0 0 20px 20px;
+  z-index: 2;
 }
 
 .bot.error .bot-mouth {
   border-bottom: none;
-  border-top: 3px solid white;
+  border-top: 3px solid #6B7280;
   border-radius: 20px 20px 0 0;
-  bottom: 10px;
+  bottom: 6px;
 }
 
 .bot.happy .bot-mouth {
@@ -439,12 +493,46 @@ body.dark .dock {
   height: 16px;
 }
 
+.speech-bubble {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border: 1.5px solid var(--border-color);
+  border-radius: 12px;
+  padding: 6px 12px;
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--text-color);
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 3;
+}
+
+.speech-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px 6px 0;
+  border-style: solid;
+  border-color: white transparent transparent;
+}
+
+.speech-bubble.visible {
+  opacity: 1;
+}
+
 .auth-tabs {
   display: flex;
-  margin-bottom: 16px;
-  border-radius: 10px;
+  margin-bottom: 18px;
+  border-radius: 12px;
   overflow: hidden;
   border: 1px solid var(--border-color);
+  background: var(--bg-color);
 }
 
 .auth-tab {
@@ -455,9 +543,23 @@ body.dark .dock {
   color: var(--text-muted);
   box-shadow: none;
   padding: 10px;
+  font-size: 0.85rem;
+}
+
+.auth-tab:active {
+  transform: none;
 }
 
 .auth-tab.active {
   background: var(--accent);
   color: white;
+}
+
+#loginForm input, #signupForm input, #signupForm select {
+  width: 100%;
+}
+
+#loginForm button, #signupForm button {
+  width: 100%;
+  margin-top: 14px;
 }
