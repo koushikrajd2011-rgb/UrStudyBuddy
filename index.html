@@ -103,8 +103,36 @@
         <button onclick="showPage('uploadPage')" style="margin-top:30px;">Notes & Quizzes</button>
         <button onclick="showPage('timetablePage')" style="margin-top:12px;">Timetable</button>
         <button onclick="showPage('homeworkPage')" style="margin-top:12px;">Homework & Stopwatch</button>
+        <button onclick="showPage('fidgetPage')" style="margin-top:12px;">Fidget Zone</button>
       </div>
     </div>
+
+    <div id="fidgetPage" class="page" style="display:none;">
+  <div class="container">
+    <button onclick="showPage('dashboardPage')">← Back</button>
+    <h1>Fidget Zone</h1>
+    <p>Take a breather</p>
+
+    <section>
+      <h2>Spinner</h2>
+      <div class="spinner-wrap">
+        <div id="fidgetSpinner" class="spinner"></div>
+      </div>
+      <p class="card-sub" style="text-align:center;">Click to spin</p>
+    </section>
+
+    <section>
+      <h2>Bubble Wrap</h2>
+      <div id="bubbleGrid" class="bubble-grid"></div>
+      <button id="resetBubbles" style="margin-top:12px;">Reset</button>
+    </section>
+
+    <section>
+      <h2>Clicky Grid</h2>
+      <div id="clickyGrid" class="clicky-grid"></div>
+    </section>
+  </div>
+</div>
 
     <div id="uploadPage" class="page" style="display:none;">
       <div class="container">

@@ -535,3 +535,76 @@ if (emailBtn) {
     }, 500);
   });
 }
+
+function playClick(freq = 500, duration = 60) {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.frequency.value = freq;
+    osc.type = "square";
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    gain.gain.setValueAtTime(0.06, ctx.currentTime);
+    osc.start();
+    osc.stop(ctx.currentTime + duration / 1000);
+  } catch (e) {}
+}
+
+const fidgetSpinner = document.getElementById("fidgetSpinner");
+if (fidgetSpinner) {
+  let spinnerAngle = 0;
+  let spinnerVelocity = 0;
+  let spinning = false;
+
+  fidgetSpinner.addEventListener("click", () => {
+    spinnerVelocity += 25;
+    if (!spinning) {
+      spinning = true;
+      const tick = () => {
+        spinnerAngle += spinnerVelocity;
+        spinnerVelocity *= 0.96;
+        fidgetSpinner.style.transform = `rotate(${spinnerAngle}deg)`;
+        if (spinnerVelocity > 0.2) {
+          requestAnimationFrame(tick);
+        } else {
+          spinning = false;
+        }
+      };
+      requestAnimationFrame(tick);
+    }
+  });
+}
+
+const bubbleGrid = document.getElementById("bubbleGrid");
+if (bubbleGrid) {
+  function buildBubbles() {
+    bubbleGrid.innerHTML = "";
+    for (let i = 0; i < 40; i++) {
+      const bubble = document.createElement("div");
+      bubble.className = "bubble";
+      bubble.addEventListener("click", () => {
+        if (bubble.classList.contains("popped")) return;
+        bubble.classList.add("popped");
+        playClick(300, 80);
+      });
+      bubbleGrid.appendChild(bubble);
+    }
+  }
+  buildBubbles();
+
+  const resetBubbles = document.getElementById("resetBubbles");
+  if (resetBubbles) resetBubbles.addEventListener("click", buildBubbles);
+}
+
+const clickyGrid = document.getElementById("clickyGrid");
+if (clickyGrid) {
+  for (let i = 0; i < 18; i++) {
+    const key = document.createElement("div");
+    key.className = "clicky-key";
+    key.addEventListener("click", () => {
+      playClick(400 + Math.random() * 300, 50);
+    });
+    clickyGrid.appendChild(key);
+  }
+}
