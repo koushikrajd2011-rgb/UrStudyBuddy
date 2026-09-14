@@ -11,19 +11,26 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { username, email, password } = req.body;
+  const { username, email, password, grade } = req.body;
   if (!username || !email || !password || username.trim() === '' || email.trim() === '' || password.trim() === '') {
     return res.status(400).json({ error: 'Username, email, and password required' });
   }
 
-  const key = `user:${username.toLowerCase()}`;
-  const existing = await redis.get(key);
+  const userKey = `user:${username.toLowerCase()}`;
+  const existing = await redis.get(userKey);
   if (existing) {
     return res.status(409).json({ error: 'Username already taken' });
   }
 
+  const emailKey = `email:${email.toLowerCase()}`;
+  const emailTaken = await redis.get(emailKey);
+  if (emailTaken) {
+    return res.status(409).json({ error: 'Email already in use' });
+  }
+
   const hashedPassword = await bcrypt.hash(password, 10);
-  await redis.set(key, JSON.stringify({ username, email, password: hashedPassword }));
+  await redis.set(userKey, JSON.stringify({ username, email, password: hashedPassword, grade }));
+  await redis.set(emailKey, username);
 
   return res.status(200).json({ success: true, username, email });
 }
