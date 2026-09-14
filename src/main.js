@@ -23,7 +23,6 @@ function updateClock() {
   const now = new Date();
   setText("dockClock", now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
 }
-
 updateClock();
 setInterval(updateClock, 1000);
 
@@ -87,10 +86,31 @@ if (signupEmailInput) {
   });
 }
 
+const botTips = ["Hi there! 👋", "Ready to study?", "Take your time!", "You've got this!"];
+
+function showBotSpeech(text, duration = 3000) {
+  const bubble = document.getElementById("botSpeech");
+  if (!bubble) return;
+  bubble.textContent = text;
+  bubble.classList.add("visible");
+  setTimeout(() => bubble.classList.remove("visible"), duration);
+}
+
+const authOverlayEl = document.getElementById("authOverlay");
+if (authOverlayEl) {
+  const observer = new MutationObserver(() => {
+    if (authOverlayEl.classList.contains("visible")) {
+      showBotSpeech(botTips[Math.floor(Math.random() * botTips.length)]);
+    }
+  });
+  observer.observe(authOverlayEl, { attributes: true, attributeFilter: ["class"] });
+}
+
 function completeLogin(username, email) {
   sessionStorage.setItem("userName", username);
   sessionStorage.setItem("userEmail", email || "");
   setBotMood("happy");
+  showBotSpeech("Yay, welcome!", 1500);
 
   setTimeout(() => {
     document.getElementById("authOverlay").classList.remove("visible");
@@ -102,6 +122,7 @@ function completeLogin(username, email) {
     setText("timetableGreeting", `${username}'s Weekly Schedule`);
     updateStreak();
     updateDashboardPreview();
+    loadTimetable();
   }, 600);
 }
 
@@ -150,11 +171,11 @@ if (signupBtn) {
 const loginBtn = document.getElementById("loginBtn");
 if (loginBtn) {
   loginBtn.addEventListener("click", async () => {
-    const username = document.getElementById("loginUsername").value.trim();
+    const identifier = document.getElementById("loginIdentifier").value.trim();
     const password = document.getElementById("loginPassword").value;
     const errorEl = document.getElementById("loginError");
 
-    if (username === "" || password === "") {
+    if (identifier === "" || password === "") {
       errorEl.textContent = "Fill in both fields.";
       setBotMood("error");
       return;
@@ -164,7 +185,7 @@ if (loginBtn) {
       const res = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ identifier, password })
       });
       const data = await res.json();
 
@@ -228,6 +249,47 @@ if (startBtn) {
   });
 }
 
+async function saveTimetable() {
+  const username = sessionStorage.getItem("userName");
+  if (!username) return;
+
+  const rows = Array.from(document.querySelectorAll("#timetableBody tr")).map(row =>
+    Array.from(row.children).map(cell => cell.textContent)
+  );
+
+  await fetch('/api/data', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, type: 'timetable', data: rows })
+  });
+}
+
+async function loadTimetable() {
+  const username = sessionStorage.getItem("userName");
+  if (!username) return;
+
+  try {
+    const res = await fetch(`/api/data?username=${encodeURIComponent(username)}&type=timetable`);
+    const { data } = await res.json();
+    if (!data) return;
+
+    const timetableBody = document.getElementById("timetableBody");
+    timetableBody.innerHTML = "";
+    data.forEach(rowData => {
+      const newRow = document.createElement("tr");
+      rowData.forEach(cellText => {
+        const cell = document.createElement("td");
+        cell.contentEditable = "true";
+        cell.textContent = cellText;
+        newRow.appendChild(cell);
+      });
+      timetableBody.appendChild(newRow);
+    });
+  } catch (err) {
+    console.error("Failed to load timetable:", err);
+  }
+}
+
 const addRowBtn = document.getElementById("addRowBtn");
 if (addRowBtn) {
   const timetableBody = document.getElementById("timetableBody");
@@ -243,7 +305,12 @@ if (addRowBtn) {
       newRow.appendChild(dayCell);
     }
     timetableBody.appendChild(newRow);
+    saveTimetable();
   });
+
+  timetableBody.addEventListener("blur", (e) => {
+    if (e.target.tagName === "TD") saveTimetable();
+  }, true);
 }
 
 function updateDashboardPreview() {
@@ -293,7 +360,6 @@ async function loadGlobalMinutes() {
 async function incrementGlobalMinutes() {
   try { await fetch("https://countapi.mileshilliard.com/api/v1/hit/urstudybuddy_minutesstudied"); } catch (e) {}
 }
-
 loadGlobalMinutes();
 setInterval(incrementGlobalMinutes, 60000);
 setInterval(loadGlobalMinutes, 65000);
