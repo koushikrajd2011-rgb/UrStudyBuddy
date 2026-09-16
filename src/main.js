@@ -730,3 +730,150 @@ function resumeSession() {
   loadTimetable();
 }
 resumeSession();
+
+const swatches = document.querySelectorAll(".swatch");
+if (swatches.length > 0) {
+  function applyAccent(accent, hover) {
+    document.documentElement.style.setProperty("--accent", accent);
+    document.documentElement.style.setProperty("--accent-hover", hover);
+    localStorage.setItem("accentColor", accent);
+    localStorage.setItem("accentHover", hover);
+    swatches.forEach(s => s.classList.toggle("active", s.dataset.accent === accent));
+  }
+
+  swatches.forEach(swatch => {
+    swatch.addEventListener("click", () => {
+      applyAccent(swatch.dataset.accent, swatch.dataset.hover);
+    });
+  });
+
+  const savedAccent = localStorage.getItem("accentColor");
+  const savedHover = localStorage.getItem("accentHover");
+  if (savedAccent && savedHover) {
+    applyAccent(savedAccent, savedHover);
+  }
+}
+
+const bgSwatches = document.querySelectorAll(".bg-swatch");
+const roomBg = document.getElementById("roomBg");
+if (bgSwatches.length > 0 && roomBg) {
+  const scenes = {
+    forest: "linear-gradient(160deg, #2d4a2e, #4a6b3a, #7a9b5e)",
+    ocean: "linear-gradient(160deg, #0f3057, #1f6f8b, #99e1d9)",
+    sunset: "linear-gradient(160deg, #2b1055, #7597de, #f6a558)",
+    night: "linear-gradient(160deg, #0b0c1e, #1b1f3b, #3a3f6b)",
+    cozy: "linear-gradient(160deg, #3a2820, #7a4a32, #d9a066)"
+  };
+
+  bgSwatches.forEach(swatch => {
+    swatch.addEventListener("click", () => {
+      roomBg.style.background = scenes[swatch.dataset.bg];
+      localStorage.setItem("roomScene", swatch.dataset.bg);
+    });
+  });
+
+  const savedScene = localStorage.getItem("roomScene");
+  if (savedScene && scenes[savedScene]) {
+    roomBg.style.background = scenes[savedScene];
+  }
+}
+
+const roomAudio = document.getElementById("roomAudio");
+if (roomAudio) {
+  const tracks = [
+    { name: "Lofi Track 1", src: "/audio/lofi-1.mp3" },
+    { name: "Lofi Track 2", src: "/audio/lofi-2.mp3" },
+    { name: "Lofi Track 3", src: "/audio/lofi-3.mp3" },
+    { name: "Lofi Track 4", src: "/audio/lofi-4.mp3" }
+  ];
+  let currentTrack = 0;
+  let isPlaying = false;
+
+  const trackList = document.getElementById("trackList");
+  const nowPlaying = document.getElementById("nowPlaying");
+  const playPauseBtn = document.getElementById("playPauseBtn");
+
+  function renderTrackList() {
+    trackList.innerHTML = "";
+    tracks.forEach((track, i) => {
+      const item = document.createElement("div");
+      item.className = "track-item" + (i === currentTrack ? " playing" : "");
+      item.textContent = track.name;
+      item.addEventListener("click", () => loadTrack(i, true));
+      trackList.appendChild(item);
+    });
+  }
+
+  function loadTrack(index, autoplay) {
+    currentTrack = index;
+    roomAudio.src = tracks[index].src;
+    nowPlaying.textContent = tracks[index].name;
+    renderTrackList();
+    if (autoplay) {
+      roomAudio.play().catch(() => {
+        nowPlaying.textContent = "Add your mp3 files to /public/audio to play";
+      });
+      isPlaying = true;
+      playPauseBtn.textContent = "⏸";
+    }
+  }
+
+  document.getElementById("playPauseBtn").addEventListener("click", () => {
+    if (!roomAudio.src) { loadTrack(0, true); return; }
+    if (isPlaying) {
+      roomAudio.pause();
+      playPauseBtn.textContent = "▶";
+    } else {
+      roomAudio.play().catch(() => {
+        nowPlaying.textContent = "Add your mp3 files to /public/audio to play";
+      });
+      playPauseBtn.textContent = "⏸";
+    }
+    isPlaying = !isPlaying;
+  });
+
+  document.getElementById("nextTrackBtn").addEventListener("click", () => {
+    loadTrack((currentTrack + 1) % tracks.length, isPlaying);
+  });
+  document.getElementById("prevTrackBtn").addEventListener("click", () => {
+    loadTrack((currentTrack - 1 + tracks.length) % tracks.length, isPlaying);
+  });
+
+  roomAudio.addEventListener("ended", () => {
+    loadTrack((currentTrack + 1) % tracks.length, true);
+  });
+
+  renderTrackList();
+  nowPlaying.textContent = "Press play to start";
+}
+
+const roomTimerStart = document.getElementById("roomTimerStart");
+if (roomTimerStart) {
+  const roomTimerPause = document.getElementById("roomTimerPause");
+  const roomTimerReset = document.getElementById("roomTimerReset");
+  const roomTimerDisplay = document.getElementById("roomTimerDisplay");
+  let roomSeconds = 25 * 60;
+  let roomInterval = null;
+
+  function updateRoomTimerDisplay() {
+    const mins = String(Math.floor(roomSeconds / 60)).padStart(2, "0");
+    const secs = String(roomSeconds % 60).padStart(2, "0");
+    roomTimerDisplay.textContent = `${mins}:${secs}`;
+  }
+
+  roomTimerStart.addEventListener("click", () => {
+    if (roomInterval !== null) return;
+    roomInterval = setInterval(() => {
+      roomSeconds--;
+      if (roomSeconds <= 0) roomSeconds = 0;
+      updateRoomTimerDisplay();
+    }, 1000);
+  });
+  roomTimerPause.addEventListener("click", () => {
+    clearInterval(roomInterval); roomInterval = null;
+  });
+  roomTimerReset.addEventListener("click", () => {
+    clearInterval(roomInterval); roomInterval = null;
+    roomSeconds = 25 * 60; updateRoomTimerDisplay();
+  });
+}
