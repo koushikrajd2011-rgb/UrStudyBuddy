@@ -734,11 +734,26 @@ function resumeSession() {
 resumeSession();
 
 const accentThemes = {
-  taupe:      { light: { accent: "#A69374", hover: "#8B7A5E" }, dark: { accent: "#C4B296", hover: "#D8C7A8" } },
-  sage:       { light: { accent: "#8CA88C", hover: "#6E8A6E" }, dark: { accent: "#A8C4A8", hover: "#8FB08F" } },
-  "dusty-blue": { light: { accent: "#7B93B3", hover: "#5F7999" }, dark: { accent: "#9DB5D1", hover: "#7E9BC0" } },
-  blush:      { light: { accent: "#C98F94", hover: "#B0767B" }, dark: { accent: "#E0ACB1", hover: "#CC9297" } },
-  plum:       { light: { accent: "#8C6B8F", hover: "#6E4F71" }, dark: { accent: "#B090B3", hover: "#9A749D" } }
+  taupe: {
+    light: { accent: "#A69374", hover: "#8B7A5E", bg: "#F5F2EC", text: "#3A352C", textMuted: "#8A8171", cardBg: "#FFFFFF", border: "#DAD6CE" },
+    dark:  { accent: "#C4B296", hover: "#D8C7A8", bg: "#26231D", text: "#EDE8DD", textMuted: "#A69B87", cardBg: "#322E25", border: "#443F32" }
+  },
+  sage: {
+    light: { accent: "#8CA88C", hover: "#6E8A6E", bg: "#F1F5EC", text: "#2E3B2A", textMuted: "#6F7D64", cardBg: "#FFFFFF", border: "#D6E0CB" },
+    dark:  { accent: "#A8C4A8", hover: "#8FB08F", bg: "#1B2119", text: "#E6EDE0", textMuted: "#9BAA8F", cardBg: "#232B20", border: "#37402F" }
+  },
+  "dusty-blue": {
+    light: { accent: "#7B93B3", hover: "#5F7999", bg: "#EEF3F8", text: "#24303D", textMuted: "#62778C", cardBg: "#FFFFFF", border: "#CFDCE8" },
+    dark:  { accent: "#9DB5D1", hover: "#7E9BC0", bg: "#151C24", text: "#E3ECF3", textMuted: "#8FA3B8", cardBg: "#1E2830", border: "#2E3D4B" }
+  },
+  blush: {
+    light: { accent: "#C98F94", hover: "#B0767B", bg: "#FBF0EF", text: "#3E2A28", textMuted: "#8C6D6A", cardBg: "#FFFFFF", border: "#EAD3D0" },
+    dark:  { accent: "#E0ACB1", hover: "#CC9297", bg: "#241715", text: "#F2E2E0", textMuted: "#B99794", cardBg: "#2E1E1B", border: "#4A312D" }
+  },
+  plum: {
+    light: { accent: "#8C6B8F", hover: "#6E4F71", bg: "#F5EFF5", text: "#34273A", textMuted: "#7C6B85", cardBg: "#FFFFFF", border: "#E0D3E2" },
+    dark:  { accent: "#B090B3", hover: "#9A749D", bg: "#1D1621", text: "#ECE1EE", textMuted: "#A992AF", cardBg: "#251C2A", border: "#3B2C42" }
+  }
 };
 
 const swatches = document.querySelectorAll(".swatch");
@@ -752,6 +767,12 @@ function applyTheme(themeName) {
 
   document.body.style.setProperty("--accent", variant.accent);
   document.body.style.setProperty("--accent-hover", variant.hover);
+  document.body.style.setProperty("--bg-color", variant.bg);
+  document.body.style.setProperty("--text-color", variant.text);
+  document.body.style.setProperty("--text-muted", variant.textMuted);
+  document.body.style.setProperty("--card-bg", variant.cardBg);
+  document.body.style.setProperty("--border-color", variant.border);
+
   localStorage.setItem("accentTheme", themeName);
   swatches.forEach(s => s.classList.toggle("active", s.dataset.theme === themeName));
 }
