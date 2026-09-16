@@ -11,6 +11,13 @@
     <nav id="topDock" class="dock">
       <span id="dockClock"></span>
       <button onclick="showPage('dashboardPage')">Dashboard</button>
+      <div class="dock-swatches">
+        <button class="swatch dock-swatch" data-theme="taupe" style="background:#A69374;"></button>
+        <button class="swatch dock-swatch" data-theme="sage" style="background:#8CA88C;"></button>
+        <button class="swatch dock-swatch" data-theme="dusty-blue" style="background:#7B93B3;"></button>
+        <button class="swatch dock-swatch" data-theme="blush" style="background:#C98F94;"></button>
+        <button class="swatch dock-swatch" data-theme="plum" style="background:#8C6B8F;"></button>
+      </div>
       <button id="darkModeToggle">Dark Mode</button>
     </nav>
 
@@ -100,22 +107,11 @@
           </div>
         </div>
 
-        <div class="theme-picker">
-          <p class="card-sub" style="text-align:center; margin-bottom:8px;">Accent color</p>
-          <div class="theme-swatches">
-            <button class="swatch" data-accent="#A69374" data-hover="#8B7A5E" style="background:#A69374;"></button>
-            <button class="swatch" data-accent="#8CA88C" data-hover="#6E8A6E" style="background:#8CA88C;"></button>
-            <button class="swatch" data-accent="#7B93B3" data-hover="#5F7999" style="background:#7B93B3;"></button>
-            <button class="swatch" data-accent="#C98F94" data-hover="#B0767B" style="background:#C98F94;"></button>
-            <button class="swatch" data-accent="#8C6B8F" data-hover="#6E4F71" style="background:#8C6B8F;"></button>
-          </div>
-        </div>
-
-        <button onclick="showPage('uploadPage')" style="margin-top:20px;">Notes & Quizzes</button>
+        <button onclick="showPage('uploadPage')" style="margin-top:30px;">Notes & Quizzes</button>
         <button onclick="showPage('timetablePage')" style="margin-top:12px;">Timetable</button>
         <button onclick="showPage('homeworkPage')" style="margin-top:12px;">Homework & Stopwatch</button>
         <button onclick="showPage('fidgetPage')" style="margin-top:12px;">Fidget Zone</button>
-        <button onclick="showPage('studyRoomPage')" style="margin-top:12px;">🎧 Study Room</button>
+        <button onclick="showPage('studyRoomPage')" style="margin-top:12px;">Study Room</button>
       </div>
     </div>
 
@@ -148,9 +144,9 @@
         <p id="statusMsg" class="error"></p>
 
         <div id="resultsBox" style="display:none;">
-          <button id="saveDraftBtn" style="margin-top:20px;">💾 Save as Draft</button>
+          <button id="saveDraftBtn" style="margin-top:20px;">Save as Draft</button>
           <p id="draftSavedMsg" class="accent" style="display:none; font-size:1rem;">Saved to your folder!</p>
-          <button id="emailBtn" style="margin-top:8px;">📧 Email Me These Notes</button>
+          <button id="emailBtn" style="margin-top:8px;">Email Me These Notes</button>
           <button onclick="showResultTab('notesTab')">Notes</button>
           <button onclick="showResultTab('quizTab')" style="margin-top:8px;">Quiz</button>
 
@@ -186,7 +182,7 @@
             <tbody id="timetableBody"></tbody>
           </table>
           <button id="addRowBtn">+</button>
-          <button id="downloadTimetableBtn" style="margin-top:12px;">⬇️ Download Timetable</button>
+          <button id="downloadTimetableBtn" style="margin-top:12px;">Download Timetable</button>
         </section>
       </div>
     </div>

@@ -16,6 +16,8 @@ if (darkModeToggle) {
   darkModeToggle.addEventListener("click", () => {
     document.body.classList.toggle("dark");
     localStorage.setItem("darkMode", document.body.classList.contains("dark"));
+    const currentTheme = localStorage.getItem("accentTheme") || "taupe";
+    applyTheme(currentTheme);
   });
 }
 
@@ -731,27 +733,38 @@ function resumeSession() {
 }
 resumeSession();
 
-const swatches = document.querySelectorAll(".swatch");
-if (swatches.length > 0) {
-  function applyAccent(accent, hover) {
-    document.documentElement.style.setProperty("--accent", accent);
-    document.documentElement.style.setProperty("--accent-hover", hover);
-    localStorage.setItem("accentColor", accent);
-    localStorage.setItem("accentHover", hover);
-    swatches.forEach(s => s.classList.toggle("active", s.dataset.accent === accent));
-  }
+const accentThemes = {
+  taupe:      { light: { accent: "#A69374", hover: "#8B7A5E" }, dark: { accent: "#C4B296", hover: "#D8C7A8" } },
+  sage:       { light: { accent: "#8CA88C", hover: "#6E8A6E" }, dark: { accent: "#A8C4A8", hover: "#8FB08F" } },
+  "dusty-blue": { light: { accent: "#7B93B3", hover: "#5F7999" }, dark: { accent: "#9DB5D1", hover: "#7E9BC0" } },
+  blush:      { light: { accent: "#C98F94", hover: "#B0767B" }, dark: { accent: "#E0ACB1", hover: "#CC9297" } },
+  plum:       { light: { accent: "#8C6B8F", hover: "#6E4F71" }, dark: { accent: "#B090B3", hover: "#9A749D" } }
+};
 
+const swatches = document.querySelectorAll(".swatch");
+
+function applyTheme(themeName) {
+  const theme = accentThemes[themeName];
+  if (!theme) return;
+
+  const isDark = document.body.classList.contains("dark");
+  const variant = isDark ? theme.dark : theme.light;
+
+  document.documentElement.style.setProperty("--accent", variant.accent);
+  document.documentElement.style.setProperty("--accent-hover", variant.hover);
+  localStorage.setItem("accentTheme", themeName);
+  swatches.forEach(s => s.classList.toggle("active", s.dataset.theme === themeName));
+}
+
+if (swatches.length > 0) {
   swatches.forEach(swatch => {
     swatch.addEventListener("click", () => {
-      applyAccent(swatch.dataset.accent, swatch.dataset.hover);
+      applyTheme(swatch.dataset.theme);
     });
   });
 
-  const savedAccent = localStorage.getItem("accentColor");
-  const savedHover = localStorage.getItem("accentHover");
-  if (savedAccent && savedHover) {
-    applyAccent(savedAccent, savedHover);
-  }
+  const savedTheme = localStorage.getItem("accentTheme") || "taupe";
+  applyTheme(savedTheme);
 }
 
 const bgSwatches = document.querySelectorAll(".bg-swatch");
