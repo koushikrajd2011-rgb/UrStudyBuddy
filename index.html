@@ -107,33 +107,6 @@
       </div>
     </div>
 
-    <div id="fidgetPage" class="page" style="display:none;">
-  <div class="container">
-    <button onclick="showPage('dashboardPage')">← Back</button>
-    <h1>Fidget Zone</h1>
-    <p>Take a breather</p>
-
-    <section>
-      <h2>Spinner</h2>
-      <div class="spinner-wrap">
-        <div id="fidgetSpinner" class="spinner"></div>
-      </div>
-      <p class="card-sub" style="text-align:center;">Click to spin</p>
-    </section>
-
-    <section>
-      <h2>Bubble Wrap</h2>
-      <div id="bubbleGrid" class="bubble-grid"></div>
-      <button id="resetBubbles" style="margin-top:12px;">Reset</button>
-    </section>
-
-    <section>
-      <h2>Clicky Grid</h2>
-      <div id="clickyGrid" class="clicky-grid"></div>
-    </section>
-  </div>
-</div>
-
     <div id="uploadPage" class="page" style="display:none;">
       <div class="container">
         <button onclick="showPage('dashboardPage')">← Back</button>
@@ -163,7 +136,9 @@
         <p id="statusMsg" class="error"></p>
 
         <div id="resultsBox" style="display:none;">
-          <button id="emailBtn" style="margin-top:20px;">📧 Email Me These Notes</button>
+          <button id="saveDraftBtn" style="margin-top:20px;">💾 Save as Draft</button>
+          <p id="draftSavedMsg" class="accent" style="display:none; font-size:1rem;">Saved to your folder!</p>
+          <button id="emailBtn" style="margin-top:8px;">📧 Email Me These Notes</button>
           <button onclick="showResultTab('notesTab')">Notes</button>
           <button onclick="showResultTab('quizTab')" style="margin-top:8px;">Quiz</button>
 
@@ -177,6 +152,11 @@
             <div id="quizContent"></div>
           </section>
         </div>
+
+        <section id="notesHistorySection" style="display:none;">
+          <h2>📁 My Notes Folder</h2>
+          <ul id="notesHistoryList"></ul>
+        </section>
       </div>
     </div>
 
@@ -194,6 +174,7 @@
             <tbody id="timetableBody"></tbody>
           </table>
           <button id="addRowBtn">+</button>
+          <button id="downloadTimetableBtn" style="margin-top:12px;">⬇️ Download Timetable</button>
         </section>
       </div>
     </div>
@@ -226,6 +207,33 @@
           <button id="pomodoroStartBtn">Start</button>
           <button id="pomodoroPauseBtn" style="margin-top:8px;">Pause</button>
           <button id="pomodoroResetBtn" style="margin-top:8px;">Reset</button>
+        </section>
+      </div>
+    </div>
+
+    <div id="fidgetPage" class="page" style="display:none;">
+      <div class="container">
+        <button onclick="showPage('dashboardPage')">← Back</button>
+        <h1>Fidget Zone</h1>
+        <p>Take a breather</p>
+
+        <section>
+          <h2>Spinner</h2>
+          <div class="spinner-wrap">
+            <div id="fidgetSpinner" class="spinner"></div>
+          </div>
+          <p class="card-sub" style="text-align:center;">Click to spin</p>
+        </section>
+
+        <section>
+          <h2>Bubble Wrap</h2>
+          <div id="bubbleGrid" class="bubble-grid"></div>
+          <button id="resetBubbles" style="margin-top:12px;">Reset</button>
+        </section>
+
+        <section>
+          <h2>Clicky Grid</h2>
+          <div id="clickyGrid" class="clicky-grid"></div>
         </section>
       </div>
     </div>

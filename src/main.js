@@ -35,6 +35,8 @@ window.showPage = function (pageId) {
   target.style.display = "block";
   void target.offsetWidth;
   target.classList.add("animate-in");
+
+  if (pageId === "uploadPage") loadNotesHistory();
 };
 
 const showAuthBtn = document.getElementById("showAuthBtn");
@@ -313,6 +315,28 @@ if (addRowBtn) {
   }, true);
 }
 
+const downloadTimetableBtn = document.getElementById("downloadTimetableBtn");
+if (downloadTimetableBtn) {
+  downloadTimetableBtn.addEventListener("click", () => {
+    const headers = ["Time", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+    const rows = Array.from(document.querySelectorAll("#timetableBody tr")).map(row =>
+      Array.from(row.children).map(cell => `"${cell.textContent.replace(/"/g, '""')}"`).join(",")
+    );
+
+    const csvContent = [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "urstudybuddy-timetable.csv";
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  });
+}
+
 function updateDashboardPreview() {
   const taskListEl = document.getElementById("taskList");
   const preview = document.getElementById("homeworkPreview");
@@ -400,6 +424,96 @@ window.showResultTab = function (tabId) {
   document.getElementById(tabId).style.display = "block";
 };
 
+async function saveNotesHistory(entry) {
+  const username = sessionStorage.getItem("userName");
+  if (!username) return;
+
+  try {
+    const res = await fetch(`/api/data?username=${encodeURIComponent(username)}&type=notes`);
+    const { data } = await res.json();
+    let history = data || [];
+
+    history.unshift(entry);
+    history = history.slice(0, 10);
+
+    await fetch('/api/data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, type: 'notes', data: history })
+    });
+  } catch (err) {
+    console.error("Failed to save notes history:", err);
+  }
+}
+
+async function loadNotesHistory() {
+  const username = sessionStorage.getItem("userName");
+  const section = document.getElementById("notesHistorySection");
+  const list = document.getElementById("notesHistoryList");
+  if (!username || !section || !list) return;
+
+  try {
+    const res = await fetch(`/api/data?username=${encodeURIComponent(username)}&type=notes`);
+    const { data } = await res.json();
+
+    list.innerHTML = "";
+    if (!data || data.length === 0) {
+      section.style.display = "none";
+      return;
+    }
+
+    data.forEach((entry) => {
+      const li = document.createElement("li");
+      const dateStr = new Date(entry.date).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+      li.textContent = `${dateStr} — ${entry.noteStyle} notes`;
+      li.addEventListener("click", () => {
+        document.getElementById("notesContent").innerHTML = marked.parse(entry.notes);
+        renderQuiz(entry.quiz);
+        document.getElementById("resultsBox").style.display = "block";
+        showResultTab("notesTab");
+      });
+      list.appendChild(li);
+    });
+
+    section.style.display = "block";
+  } catch (err) {
+    console.error("Failed to load notes history:", err);
+  }
+}
+
+let currentGeneratedNotes = null;
+
+const saveDraftBtn = document.getElementById("saveDraftBtn");
+if (saveDraftBtn) {
+  saveDraftBtn.addEventListener("click", async () => {
+    if (!currentGeneratedNotes) return;
+    await saveNotesHistory(currentGeneratedNotes);
+    loadNotesHistory();
+    const msg = document.getElementById("draftSavedMsg");
+    msg.style.display = "block";
+    setTimeout(() => { msg.style.display = "none"; }, 2000);
+  });
+}
+
+function renderQuiz(quiz) {
+  const quizContent = document.getElementById("quizContent");
+  quizContent.innerHTML = "";
+  quiz.forEach((q, i) => {
+    const qDiv = document.createElement("div");
+    qDiv.style.marginBottom = "16px";
+    qDiv.style.textAlign = "left";
+    qDiv.innerHTML = `<strong>${i + 1}. ${q.question}</strong>`;
+    q.options.forEach((opt, idx) => {
+      const optP = document.createElement("p");
+      optP.textContent = `${String.fromCharCode(65 + idx)}. ${opt}`;
+      optP.style.textAlign = "left";
+      optP.style.margin = "4px 0";
+      qDiv.appendChild(optP);
+    });
+    quizContent.appendChild(qDiv);
+  });
+}
+
 const generateBtn = document.getElementById("generateBtn");
 if (generateBtn) {
   const pdfInput = document.getElementById("pdfInput");
@@ -434,23 +548,15 @@ if (generateBtn) {
       if (data.error) throw new Error(data.error);
 
       document.getElementById("notesContent").innerHTML = marked.parse(data.notes);
+      renderQuiz(data.quiz);
 
-      const quizContent = document.getElementById("quizContent");
-      quizContent.innerHTML = "";
-      data.quiz.forEach((q, i) => {
-        const qDiv = document.createElement("div");
-        qDiv.style.marginBottom = "16px";
-        qDiv.style.textAlign = "left";
-        qDiv.innerHTML = `<strong>${i + 1}. ${q.question}</strong>`;
-        q.options.forEach((opt, idx) => {
-          const optP = document.createElement("p");
-          optP.textContent = `${String.fromCharCode(65 + idx)}. ${opt}`;
-          optP.style.textAlign = "left";
-          optP.style.margin = "4px 0";
-          qDiv.appendChild(optP);
-        });
-        quizContent.appendChild(qDiv);
-      });
+      currentGeneratedNotes = {
+        date: new Date().toISOString(),
+        notes: data.notes,
+        quiz: data.quiz,
+        noteStyle
+      };
+      document.getElementById("draftSavedMsg").style.display = "none";
 
       statusMsg.textContent = "";
       resultsBox.style.display = "block";
@@ -608,3 +714,19 @@ if (clickyGrid) {
     clickyGrid.appendChild(key);
   }
 }
+
+function resumeSession() {
+  const username = sessionStorage.getItem("userName");
+  if (!username) return;
+
+  document.getElementById("landingPage").style.display = "none";
+  showPage("dashboardPage");
+
+  setText("welcomeText", `Welcome, ${username}!`);
+  setText("homeworkGreeting", `Hey ${username}, ready to tackle homework?`);
+  setText("timetableGreeting", `${username}'s Weekly Schedule`);
+  updateStreak();
+  updateDashboardPreview();
+  loadTimetable();
+}
+resumeSession();
