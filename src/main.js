@@ -750,8 +750,8 @@ function applyTheme(themeName) {
   const isDark = document.body.classList.contains("dark");
   const variant = isDark ? theme.dark : theme.light;
 
-  document.documentElement.style.setProperty("--accent", variant.accent);
-  document.documentElement.style.setProperty("--accent-hover", variant.hover);
+  document.body.style.setProperty("--accent", variant.accent);
+  document.body.style.setProperty("--accent-hover", variant.hover);
   localStorage.setItem("accentTheme", themeName);
   swatches.forEach(s => s.classList.toggle("active", s.dataset.theme === themeName));
 }
